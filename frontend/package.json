@@ -1,0 +1,32 @@
+{
+  "name": "basecred",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "deploy": "mv .env.local .env.local.deploy && next build && opennextjs-cloudflare build && cp .open-next/worker.js .open-next/assets/_worker.js && echo '_worker.js' > .open-next/assets/.assetsignore && npx wrangler deploy && mv .env.local.deploy .env.local"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5",
+    "next": "16.2.6",
+    "next-auth": "^5.0.0-beta.31",
+    "react": "^19",
+    "react-dom": "^19",
+    "viem": "^2",
+    "wagmi": "^2"
+  },
+  "devDependencies": {
+    "@opennextjs/cloudflare": "^1.19.11",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

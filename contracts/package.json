@@ -1,0 +1,15 @@
+{
+  "name": "basecred-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy:sepolia": "hardhat run scripts/deploy.ts --network baseSepolia"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5",
+    "hardhat": "^2",
+    "typescript": "^5",
+    "ts-node": "^10"
+  }
+}
