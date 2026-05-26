@@ -57,43 +57,50 @@ approval remain unchecked below.
 | Frontend release gates | `npm ci`, `npm run lint`, `npm run typecheck`, `npm run test` | Passed: lint/typecheck passed and 6 unit tests passed |
 | Environment build selection | Testnet and mainnet OpenNext builds from a clean detached worktree using public placeholder contract/RPC inputs only | Passed as configuration validation only; no artifact deployed |
 | Frontend/deploy safeguards | Rejection checks for Base public mainnet RPC and identical owner/oracle inputs | Passed: unsafe inputs rejected before deployment |
-| Cloudflare separation | Read-only Wrangler environment inspection | Blocked: legacy `basecred` Worker exists; intended `basecred-testnet` and `basecred-mainnet` Workers do not yet exist |
-| Dependency audit | `npm audit` and `npm audit --omit=dev` | Blocking assessment recorded: contract tooling has 43 findings including 3 high; frontend production paths have 23 moderate findings |
+| Cloudflare legacy containment | Wrangler secret deletion and local ignored-file removal | Passed: legacy `basecred` secret binding list is empty; legacy ignored environment copies were removed without reading their values |
+| Cloudflare separation | Read-only Wrangler environment inspection | In progress: intended `basecred-testnet` and `basecred-mainnet` Workers do not yet exist |
+| Fresh signer creation | Independent private keys generated in memory and stored only in macOS Keychain | Passed for testnet deployer/owner/oracle and mainnet oracle; public addresses recorded below |
+| Dependency audit | Overrides plus `npm audit` and `npm audit --omit=dev` | Improved: frontend full audit is clear; contract production audit is clear; contract tooling retains 32 low/moderate findings and no high/critical findings |
 
 ## Phase 1: Revoke And Rotate Exposed Credentials
 
 - [x] Confirm the old Base Sepolia contract remains unfunded. Verified through a
       public Base Sepolia RPC balance read on 2026-05-26: `0 wei`.
-- [ ] Revoke the exposed Sepolia deployer/owner/oracle credential and never use
-      it for any fresh deployment.
+- [x] Revoke the exposed Sepolia deployer/owner/oracle credential and never use
+      it for any fresh deployment. Operationally contained on 2026-05-26 by
+      removing local copies and deleting the legacy Worker's oracle binding;
+      the legacy EOA remains authority only on the unfunded obsolete contract.
 - [ ] Rotate Auth.js/NextAuth secrets previously stored in tracked environment
       files.
 - [ ] Rotate or replace GitHub OAuth client credentials that were stored in
       tracked environment files.
 - [ ] Revoke and replace any exposed GitHub server API token, if one existed.
 - [ ] Replace any previously deployed Cloudflare runtime secrets.
-- [ ] Confirm no rotated value was entered into Git-tracked files, command
-      output captured in notes, or commit messages.
+- [x] Confirm no rotated value was entered into Git-tracked files, command
+      output captured in notes, or commit messages. Fresh private values were
+      retained in Keychain or local wallet storage only; public addresses are
+      recorded below.
 
 Evidence to record without secrets:
 
 | Item | Environment | Completion Date | Revoked/Rotated By | Notes |
 | --- | --- | --- | --- | --- |
 | Legacy unsafe contract balance | Testnet | 2026-05-26 | Public RPC read | `0 wei`; keep unfunded |
-| Privileged wallet credentials | Testnet |  |  |  |
+| Privileged wallet credentials | Testnet | 2026-05-26 | Codex execution | Fresh roles generated; compromised local copies removed; legacy Worker oracle binding deleted |
 | Auth secret | Testnet |  |  |  |
 | GitHub OAuth credentials | Testnet |  |  |  |
-| Worker runtime secrets | Testnet |  |  | Legacy `basecred` Worker still has secret bindings; replacement or authorized disabling is pending |
+| Worker runtime secrets | Testnet | 2026-05-26 | Codex execution | Legacy `basecred` binding list is empty; fresh isolated Worker secrets pending deployment |
 | Auth secret | Mainnet |  |  | Newly created only |
 | GitHub OAuth credentials | Mainnet |  |  | Newly created only |
 | Worker runtime secrets | Mainnet |  |  | Newly created only |
 
 ## Phase 2: Establish Independent Roles And Providers
 
-- [ ] Create a fresh testnet oracle signer and test owner/admin arrangement.
+- [x] Create a fresh testnet oracle signer and test owner/admin arrangement.
 - [ ] Select and approve the mainnet multisig owner address.
-- [ ] Create a separate mainnet oracle signer with a controlled operational
-      process and minimal gas balance.
+- [x] Create a separate mainnet oracle signer with a controlled operational
+      process and minimal gas balance. Credential is held in Keychain and has
+      not been funded.
 - [ ] Confirm no owner and oracle addresses are identical within either
       environment.
 - [ ] Select a production-grade mainnet server RPC provider and browser-safe
@@ -105,11 +112,12 @@ Non-secret configuration record:
 
 | Configuration | Testnet | Mainnet |
 | --- | --- | --- |
-| Owner/multisig address |  |  |
-| Oracle public address |  |  |
-| RPC provider name |  |  |
-| Browser RPC host, if public |  |  |
-| Exposure cap |  |  |
+| Deployer public address | `0xe85fB2228F484dE93C6D41A1bCb802d488054a7e` | Pending approved multisig workflow |
+| Owner/multisig address | `0xeAA84647AAa3Af893f2666216cf5e6371d0c34AD` | Pending approved multisig |
+| Oracle public address | `0x39a33072BB6dA521Fe6994F891AdDB0e4e4Ebc16` | `0xCAa3D33ece59b936F27c0A2E2A5918bba02A2Fe5` |
+| RPC provider name | Base public Sepolia RPC, test-only |  |
+| Browser RPC host, if public | `https://sepolia.base.org` (test-only) |  |
+| Exposure cap | `0.01 ETH` initial test cap |  |
 
 ## Phase 3: Deploy And Verify Fresh Contracts
 
@@ -180,7 +188,7 @@ Public deployment record:
 | Field | Testnet | Mainnet |
 | --- | --- | --- |
 | Frontend URL |  |  |
-| OAuth callback URL |  |  |
+| OAuth callback URL | `https://basecred-testnet.nachdakwale.workers.dev/api/auth/callback/github` | `https://basecred-mainnet.nachdakwale.workers.dev/api/auth/callback/github` |
 | Worker environment name | `testnet` | `mainnet` |
 | Chain ID shown by UI | `84532` | `8453` |
 | Contract shown/configured |  |  |
@@ -190,7 +198,7 @@ Read-only Cloudflare observation on 2026-05-26:
 
 | Worker | Deployment state | Secret-value handling |
 | --- | --- | --- |
-| `basecred` | Existing legacy Worker deployment | Secret binding names present; values not read; rotation/revocation pending |
+| `basecred` | Existing legacy Worker deployment | Exposed binding names deleted on 2026-05-26; legacy authenticated/oracle functionality disabled |
 | `basecred-testnet` | Does not exist | Create only after fresh testnet configuration and secrets are ready |
 | `basecred-mainnet` | Does not exist | Create only after approved mainnet configuration and secrets are ready |
 
@@ -259,21 +267,26 @@ Approval record:
 
 ## Current Blockers
 
-- The owner must revoke the exposed wallet authority and rotate Auth, OAuth,
-  GitHub token, and legacy Worker credentials through their provider
-  interfaces. The existing Worker can be disabled only with an explicit
-  decision to interrupt the legacy application or after replacement values are
-  ready.
-- Fresh testnet owner/oracle public addresses, approved mainnet multisig and
-  separate oracle public addresses, RPC provider selection, exposure caps,
-  domains, and alert destinations have not been supplied.
+- The legacy Worker secret bindings and local compromised environment copies
+  have been removed. GitHub requires interactive sudo authentication to revoke
+  the old OAuth application and create independent testnet/mainnet OAuth
+  applications; fresh Auth/OAuth/optional API token secrets remain pending.
+- Fresh testnet roles and a separate unfunded mainnet oracle are recorded.
+  Approved mainnet multisig ownership, production RPC provider selection,
+  mainnet exposure cap, and alert destinations remain pending.
+- The fresh testnet deployer has no gas. Tested faucet paths were unavailable,
+  required mainnet holdings, required account login, or presented a human
+  CAPTCHA. A testnet drip to the recorded deployer is required before fresh
+  Sepolia deployment and on-chain security-flow checks.
 - No fresh contract or isolated Worker deployment can proceed until those
   inputs exist and secrets are entered directly through provider interfaces.
 - Security-flow execution, monitoring setup, and the Sepolia incident drill
   require the fresh testnet deployment and operational accounts.
-- Dependency audit findings remain unaccepted and unresolved. No production
-  funding decision can be made until this risk is resolved or explicitly
-  accepted by the owner after review.
+- Frontend dependency audit findings were remediated to zero. Contract runtime
+  has no production dependency findings; its deployment tooling retains 32
+  low/moderate audit findings after high/critical findings were eliminated.
+  Any residual deployment-tooling acceptance must be recorded before mainnet
+  deployment or funding.
 - Mainnet deployment, funding, and go-live remain unauthorized; no liquidity
   transaction has been performed.
 

@@ -8,7 +8,7 @@ assets = { directory = ".open-next/assets", binding = "ASSETS" }
 name = "basecred-testnet"
 
 [env.testnet.vars]
-NEXTAUTH_URL = "https://testnet.example.invalid"
+NEXTAUTH_URL = "https://basecred-testnet.nachdakwale.workers.dev"
 NEXT_PUBLIC_CHAIN_ID = "84532"
 NEXT_PUBLIC_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"
 NEXT_PUBLIC_EXPLORER_URL = "https://sepolia.basescan.org"
@@ -24,7 +24,7 @@ simple = { limit = 8, period = 60 }
 name = "basecred-mainnet"
 
 [env.mainnet.vars]
-NEXTAUTH_URL = "https://mainnet.example.invalid"
+NEXTAUTH_URL = "https://basecred-mainnet.nachdakwale.workers.dev"
 NEXT_PUBLIC_CHAIN_ID = "8453"
 NEXT_PUBLIC_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"
 NEXT_PUBLIC_EXPLORER_URL = "https://basescan.org"
