@@ -11,6 +11,9 @@ mainnet deployments. Code changes cannot rotate disclosed credentials or make
 the old contract safe. Mainnet is not authorized until the manual gates below
 are complete.
 
+Use `docs/OWNER_ACTIONS.md` as the execution checklist and non-secret evidence
+record for every owner-controlled action required before mainnet funding.
+
 ## Mandatory Credential Rotation
 
 Assume all values formerly present in `contracts/.env`, `frontend/.env.local`,
