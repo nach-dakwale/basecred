@@ -52,7 +52,7 @@ approval remain unchecked below.
 | Validation | Non-secret evidence | Result |
 | --- | --- | --- |
 | Legacy Sepolia contract balance | Public Base Sepolia RPC read of `0x660726E88d838Da13FFbD3368302f88C8a717Ed4` on chain `84532` | Passed: contract code exists and balance is `0 wei` |
-| Tracked credential cleanup | `git ls-files` and ignore checks | Passed for HEAD: populated environment files are not tracked; ignored legacy local files remain present and were not inspected |
+| Tracked credential cleanup | `git ls-files` and ignore checks; deletion of ignored compromised local copies without reading values | Passed for HEAD: populated environment files are not tracked; legacy ignored local environment copies were removed |
 | Contract release gates | `npm ci`, `npm run test`, `npm run compile` | Passed: 10 contract tests passed and compilation completed |
 | Frontend release gates | `npm ci`, `npm run lint`, `npm run typecheck`, `npm run test` | Passed: lint/typecheck passed and 6 unit tests passed |
 | Environment build selection | Testnet and mainnet OpenNext builds from a clean detached worktree using public placeholder contract/RPC inputs only | Passed as configuration validation only; no artifact deployed |
@@ -60,6 +60,7 @@ approval remain unchecked below.
 | Cloudflare legacy containment | Wrangler secret deletion and local ignored-file removal | Passed: legacy `basecred` secret binding list is empty; legacy ignored environment copies were removed without reading their values |
 | Cloudflare separation | Read-only Wrangler environment inspection | In progress: intended `basecred-testnet` and `basecred-mainnet` Workers do not yet exist |
 | Fresh signer creation | Independent private keys generated in memory and stored only in macOS Keychain | Passed for testnet deployer/owner/oracle and mainnet oracle; public addresses recorded below |
+| Fresh testnet deployer funding | Public Base Sepolia and Ethereum Sepolia RPC balance reads; Base-listed faucet attempts using the public deployer address only | Blocked: `0 ETH` on both chains; available faucet routes required human verification/account action or prohibited mainnet-balance dependency |
 | Dependency audit | Overrides plus `npm audit` and `npm audit --omit=dev` | Improved: frontend full audit is clear; contract production audit is clear; contract tooling retains 32 low/moderate findings and no high/critical findings |
 
 ## Phase 1: Revoke And Rotate Exposed Credentials
