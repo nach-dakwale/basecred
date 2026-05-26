@@ -1,0 +1,30 @@
+# Secrets and local environment configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+.dev.vars
+.dev.vars.*
+
+# Dependencies and logs
+node_modules/
+*.log
+
+# Next.js / OpenNext / Cloudflare output
+.next/
+.open-next/
+.wrangler/
+out/
+dist/
+*.tsbuildinfo
+
+# Hardhat build output and local coverage
+contracts/artifacts/
+contracts/cache/
+contracts/typechain-types/
+coverage/
+
+# Editor and operating-system local files
+.DS_Store
+.idea/
+.vscode/
