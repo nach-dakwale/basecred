@@ -37,6 +37,11 @@ Before any new deployment:
 Never store generated credentials in repository files. Local ignored `.env`
 files are suitable only for disposable local/test setup; deployed secrets must
 be set through Cloudflare secret bindings or the deployment secret manager.
+After rotating their contents, remove legacy ignored `frontend/.env.local` and
+`frontend/.env.production` before any deployable build, or build from a clean
+checkout. Next.js production builds automatically load those filenames, so
+providing environment-specific public variables alone does not isolate a build
+from legacy server-side values.
 
 ## Contract Safety Model
 
