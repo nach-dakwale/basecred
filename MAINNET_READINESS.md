@@ -26,6 +26,55 @@ Owner and oracle: the same externally owned account
 
 Keep this deployment unfunded. Its controlling key has been committed to the repository and its borrowing model can be drained by a single qualifying identity using multiple wallets.
 
+## Remediation Implementation Status
+
+Implementation branch: `feat/mainnet-dual-environment`
+
+The findings below describe the pre-remediation deployment and remain relevant
+to the existing Sepolia contract. The implementation branch introduces:
+
+- Git ignore/untracking policy for private environment files, dependencies,
+  framework/Worker build output, TypeScript state, and Hardhat build/cache
+  output; committed environment content is reduced to placeholders.
+- An identity-bound replacement contract that consumes wallet proof nonces,
+  restricts migration, stores loans/default state per hashed GitHub identity,
+  reserves borrower collateral, caps scores and aggregate exposure, and
+  supports oracle revocation/rotation plus two-step ownership transfer.
+- A server-side wallet proof flow: a signed expiring challenge is required
+  before oracle score submission, native Cloudflare rate-limit bindings protect
+  the API path, and security-relevant oracle outcomes are logged.
+- Server-only GitHub API credential handling: OAuth access tokens are no longer
+  copied into browser session data; the server scores the authenticated public
+  GitHub identity using an optional server-managed API token.
+- Separate testnet/mainnet network selection, OpenNext build/deploy commands,
+  Wrangler environments, deployment commands, visible network identification,
+  and focused contract/application release-gate tests.
+
+No credential rotation, fresh contract deployment, OAuth callback update,
+Cloudflare secret entry, multisig selection, RPC-provider selection, contract
+verification, funding, or mainnet launch was performed in code. These are
+mandatory owner actions documented in `docs/OPERATIONS.md`. Until completed,
+BaseCred is not mainnet-ready and the existing Sepolia deployment must remain
+unfunded.
+
+### Implementation Verification
+
+Run on `feat/mainnet-dual-environment` on 2026-05-26:
+
+| Gate | Result |
+| --- | --- |
+| Contract tests: `npm run test` | Passed, 10 identity/loss-control tests |
+| Contract compile: `npm run compile` | Passed |
+| Frontend lint: `npm run lint` | Passed |
+| Frontend typecheck: `npm run typecheck` | Passed |
+| Frontend unit tests: `npm run test` | Passed, 6 configuration/proof/session tests |
+| Testnet OpenNext Worker build with placeholder deployment address | Passed |
+| Mainnet OpenNext Worker build with placeholder deployment address and non-public RPC placeholder | Passed |
+| Wrangler testnet/mainnet environment dry runs | Passed; environment-specific rate limits and public vars detected |
+
+The builds used non-secret placeholder contract/RPC inputs solely to validate
+artifact selection. They do not represent deployments or approval to fund.
+
 ## Critical Blockers
 
 ### 1. Credit Can Be Reused Across Unlimited Wallets
@@ -235,7 +284,7 @@ Required remediation:
 - Add a valid ESLint configuration compatible with Next.js and ESLint 9.
 - Run lint and typecheck in CI prior to deployment.
 
-## Verified Checks
+## Pre-Remediation Verified Checks
 
 Performed against the current repository state on 2026-05-26:
 
