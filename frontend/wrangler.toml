@@ -7,4 +7,4 @@ assets = { directory = ".open-next/assets", binding = "ASSETS" }
 
 [vars]
 NEXTAUTH_URL = "https://basecred.nachdakwale.workers.dev"
-NEXT_PUBLIC_CONTRACT_ADDRESS = "0xA9f68e3ae46987bfC30d6F0f1E2AcF92cA21222c"
+NEXT_PUBLIC_CONTRACT_ADDRESS = "0x660726E88d838Da13FFbD3368302f88C8a717Ed4"
