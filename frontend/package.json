@@ -7,7 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "mv .env.local .env.local.deploy && next build && opennextjs-cloudflare build && cp .open-next/worker.js .open-next/assets/_worker.js && echo '_worker.js' > .open-next/assets/.assetsignore && npx wrangler deploy && mv .env.local.deploy .env.local"
+    "typecheck": "tsc --noEmit --incremental false",
+    "test": "vitest run",
+    "build:testnet": "dotenv -e .env.testnet.local -- node scripts/build-worker.mjs testnet",
+    "build:mainnet": "dotenv -e .env.mainnet.local -- node scripts/build-worker.mjs mainnet",
+    "deploy:testnet": "npm run build:testnet && wrangler deploy --env testnet",
+    "deploy:mainnet": "npm run build:mainnet && wrangler deploy --env mainnet"
   },
   "dependencies": {
     "@tanstack/react-query": "^5",
@@ -24,9 +29,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "^8",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3"
   }
 }

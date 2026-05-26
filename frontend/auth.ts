@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
+import { addPublicGitHubIdentity } from "@/lib/session";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
@@ -8,21 +9,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     GitHub({
       clientId:     process.env.AUTH_GITHUB_ID     ?? process.env.GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET ?? process.env.GITHUB_SECRET,
-      authorization: { params: { scope: "read:user public_repo" } },
+      authorization: { params: { scope: "read:user" } },
     }),
   ],
   callbacks: {
-    async jwt({ token, account, profile }) {
-      if (account?.access_token) token.githubAccessToken = account.access_token;
+    async jwt({ token, profile }) {
       const githubLogin = (profile as { login?: unknown } | undefined)?.login;
+      const githubId = (profile as { id?: unknown } | undefined)?.id;
       if (typeof githubLogin === "string") token.githubLogin = githubLogin;
+      if (typeof githubId === "number" || typeof githubId === "string") token.githubId = String(githubId);
       return token;
     },
     async session({ session, token }) {
-      const githubSession = session as { githubAccessToken?: string; githubLogin?: string };
-      githubSession.githubAccessToken = token.githubAccessToken as string | undefined;
-      githubSession.githubLogin = token.githubLogin as string | undefined;
-      return session;
+      return addPublicGitHubIdentity(session, token as unknown as { githubId?: unknown; githubLogin?: unknown });
     },
   },
 });

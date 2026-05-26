@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useBlockNumber, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { parseEther, formatEther } from "viem";
-import { baseSepolia } from "wagmi/chains";
+import { parseEther, formatEther, zeroHash, type Hex } from "viem";
 import { ABI, CONTRACT_ADDRESS } from "@/lib/contract";
+import { PUBLIC_NETWORK } from "@/lib/network";
 import type { ScoreBreakdown } from "@/lib/scoring";
 
 interface ActiveLoan {
@@ -22,19 +22,34 @@ interface Props {
 
 const INTEREST_BPS = 1000n;
 const BPS_DENOMINATOR = 10000n;
-const BLOCK_TIME_SECONDS = 2;
 
 export function LoanPanel({ address, breakdown, onTxHash }: Props) {
   const [amount, setAmount] = useState("");
   const handledHash = useRef<string | undefined>(undefined);
   const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { data: identity } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: ABI,
+    functionName: "identityForWallet",
+    args: [address as `0x${string}`],
+  });
+  const identityId = identity as Hex | undefined;
+  const hasIdentity = !!identityId && identityId !== zeroHash;
   const { data: loan, refetch: refetchLoan } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: ABI,
     functionName: "loans",
-    args: [address as `0x${string}`],
+    args: hasIdentity ? [identityId] : undefined,
+    query: { enabled: hasIdentity },
   });
-  const { data: currentBlock } = useBlockNumber({ chainId: baseSepolia.id, watch: true });
+  const { data: isDefaulted } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: ABI,
+    functionName: "defaulted",
+    args: hasIdentity ? [identityId] : undefined,
+    query: { enabled: hasIdentity },
+  });
+  const { data: currentBlock } = useBlockNumber({ chainId: PUBLIC_NETWORK.chain.id, watch: true });
 
   const loanTuple = loan as readonly [bigint, bigint, bigint, boolean] | undefined;
   const activeLoan: ActiveLoan | null = loanTuple?.[3]
@@ -59,10 +74,6 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
     const remainingBlocks = currentBlock !== undefined && activeLoan.dueBlock > currentBlock
       ? activeLoan.dueBlock - currentBlock
       : 0n;
-    const dueDate = currentBlock !== undefined
-      ? new Date(Date.now() + Number(remainingBlocks) * BLOCK_TIME_SECONDS * 1000)
-      : null;
-
     return (
       <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-5 space-y-4 text-zinc-100">
         <h2 className="text-sm font-semibold text-white">Active Loan</h2>
@@ -78,10 +89,10 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
           <div className="rounded-md bg-zinc-800/60 border border-zinc-700/50 p-3 col-span-2">
             <p className="text-xs text-zinc-500">Total repayment due</p>
             <p className="font-semibold text-white mt-0.5">{formatEther(repayWei)} ETH</p>
-            <p className="text-xs text-zinc-500 mt-2">Estimated due date</p>
+            <p className="text-xs text-zinc-500 mt-2">Maturity</p>
             <p className="text-xs text-zinc-400 mt-0.5">
-              {dueDate
-                ? dueDate.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })
+              {currentBlock !== undefined
+                ? `${remainingBlocks.toString()} blocks remaining`
                 : `Block ${activeLoan.dueBlock.toString()}`}
             </p>
           </div>
@@ -94,7 +105,7 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
               abi: ABI,
               functionName: "repayLoan",
               value: repayWei,
-              chain: baseSepolia,
+              chain: PUBLIC_NETWORK.chain,
             })
           }
           disabled={isPending}
@@ -115,7 +126,11 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
   return (
     <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-5 space-y-4 text-zinc-100">
       <h2 className="text-sm font-semibold text-white">Request a Loan</h2>
-      {maxEth === 0 ? (
+      {isDefaulted ? (
+        <p className="text-sm text-red-400">
+          This credit identity has a defaulted loan and is permanently blocked from new borrowing.
+        </p>
+      ) : maxEth === 0 ? (
         <p className="text-sm text-zinc-500">
           Your score is too low to borrow. Contribute to web3 open source projects to raise it.
         </p>
@@ -155,7 +170,7 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
                 functionName: "requestLoan",
                 args: [parseEther(amount as `${number}`)],
                 value: colWei,
-                chain: baseSepolia,
+                chain: PUBLIC_NETWORK.chain,
               });
             }}
             disabled={isPending || !amount || amountNum <= 0 || amountNum > maxEth}
@@ -164,7 +179,7 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
             {isPending ? "Submitting..." : "Request Loan"}
           </button>
           <p className="text-xs text-zinc-600">
-            10% flat interest. 30-day repayment window. Defaulted loans slash your credit score.
+            10% flat interest. 30-day repayment window. A liquidated default permanently blocks new borrowing.
           </p>
         </>
       )}

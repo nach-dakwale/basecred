@@ -75,15 +75,16 @@ export interface FetchScoreResult {
   breakdown: ScoreBreakdown;
 }
 
-export async function fetchAndScore(githubToken: string): Promise<FetchScoreResult> {
-  const headers = {
-    Authorization: `Bearer ${githubToken}`,
+export async function fetchAndScore(githubLogin: string, githubApiToken?: string): Promise<FetchScoreResult> {
+  if (!/^[A-Za-z0-9-]{1,39}$/.test(githubLogin)) throw new Error("Invalid GitHub login");
+  const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "BaseCred/1.0",
   };
+  if (githubApiToken) headers.Authorization = `Bearer ${githubApiToken}`;
 
-  const userRes = await fetch("https://api.github.com/user", { headers });
+  const userRes = await fetch(`https://api.github.com/users/${encodeURIComponent(githubLogin)}`, { headers });
   if (!userRes.ok) throw new Error(`GitHub API ${userRes.status}`);
   const user = await userRes.json();
 
@@ -95,18 +96,21 @@ export async function fetchAndScore(githubToken: string): Promise<FetchScoreResu
     `https://api.github.com/search/issues?q=${encodeURIComponent(web3Query)}&per_page=1`,
     { headers }
   );
+  if (!web3Res.ok) throw new Error(`GitHub API ${web3Res.status}`);
   const web3MergedPRs = ((await web3Res.json()).total_count ?? 0) as number;
 
   const allPrsRes = await fetch(
     `https://api.github.com/search/issues?q=${encodeURIComponent(`is:pr is:merged author:${user.login}`)}&per_page=1`,
     { headers }
   );
+  if (!allPrsRes.ok) throw new Error(`GitHub API ${allPrsRes.status}`);
   const otherOssMergedPRs = Math.max(0, ((await allPrsRes.json()).total_count ?? 0) - web3MergedPRs);
 
   const eventsRes = await fetch(
     `https://api.github.com/users/${user.login}/events/public?per_page=100`,
     { headers }
   );
+  if (!eventsRes.ok) throw new Error(`GitHub API ${eventsRes.status}`);
   const events = await eventsRes.json();
   const oneYearAgo = Date.now() - 365 * 24 * 60 * 60 * 1000;
   const personalRepoEvents = Array.isArray(events)

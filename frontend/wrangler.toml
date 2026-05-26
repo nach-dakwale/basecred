@@ -2,9 +2,36 @@ name = "basecred"
 main = ".open-next/worker.js"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
-
 assets = { directory = ".open-next/assets", binding = "ASSETS" }
 
-[vars]
-NEXTAUTH_URL = "https://basecred.nachdakwale.workers.dev"
-NEXT_PUBLIC_CONTRACT_ADDRESS = "0x660726E88d838Da13FFbD3368302f88C8a717Ed4"
+[env.testnet]
+name = "basecred-testnet"
+
+[env.testnet.vars]
+NEXTAUTH_URL = "https://testnet.example.invalid"
+NEXT_PUBLIC_CHAIN_ID = "84532"
+NEXT_PUBLIC_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"
+NEXT_PUBLIC_EXPLORER_URL = "https://sepolia.basescan.org"
+NEXT_PUBLIC_NETWORK_NAME = "Base Sepolia Testnet"
+NEXT_PUBLIC_RPC_URL = "https://sepolia.base.org"
+
+[[env.testnet.ratelimits]]
+name = "API_RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 8, period = 60 }
+
+[env.mainnet]
+name = "basecred-mainnet"
+
+[env.mainnet.vars]
+NEXTAUTH_URL = "https://mainnet.example.invalid"
+NEXT_PUBLIC_CHAIN_ID = "8453"
+NEXT_PUBLIC_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"
+NEXT_PUBLIC_EXPLORER_URL = "https://basescan.org"
+NEXT_PUBLIC_NETWORK_NAME = "Base Mainnet"
+NEXT_PUBLIC_RPC_URL = "https://browser-rpc-provider.example.invalid"
+
+[[env.mainnet.ratelimits]]
+name = "API_RATE_LIMITER"
+namespace_id = "2001"
+simple = { limit = 5, period = 60 }

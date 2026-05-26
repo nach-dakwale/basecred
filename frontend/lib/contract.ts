@@ -1,91 +1,58 @@
-export const CONTRACT_ADDRESS =
-  (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ?? "0x0000000000000000000000000000000000000000") as `0x${string}`;
+import { PUBLIC_NETWORK } from "@/lib/network";
+
+export const CONTRACT_ADDRESS = PUBLIC_NETWORK.contractAddress;
 
 export const ABI = [
   {
-    name: "setScore",
-    type: "function",
+    name: "setScoreAndBind", type: "function", stateMutability: "nonpayable", outputs: [],
     inputs: [
-      { name: "borrower", type: "address" },
-      { name: "score",    type: "uint256" },
+      { name: "identityId", type: "bytes32" },
+      { name: "wallet", type: "address" },
+      { name: "score", type: "uint256" },
+      { name: "proofNonce", type: "bytes32" },
     ],
-    outputs: [],
-    stateMutability: "nonpayable",
   },
   {
-    name: "requestLoan",
-    type: "function",
+    name: "requestLoan", type: "function", stateMutability: "payable", outputs: [],
     inputs: [{ name: "amount", type: "uint256" }],
-    outputs: [],
-    stateMutability: "payable",
   },
   {
-    name: "repayLoan",
-    type: "function",
-    inputs: [],
-    outputs: [],
-    stateMutability: "payable",
+    name: "repayLoan", type: "function", stateMutability: "payable", inputs: [], outputs: [],
   },
   {
-    name: "scores",
-    type: "function",
-    inputs: [{ name: "", type: "address" }],
-    outputs: [{ name: "", type: "uint256" }],
-    stateMutability: "view",
+    name: "identityForWallet", type: "function", stateMutability: "view",
+    inputs: [{ name: "", type: "address" }], outputs: [{ name: "", type: "bytes32" }],
   },
   {
-    name: "loans",
-    type: "function",
-    inputs: [{ name: "", type: "address" }],
+    name: "loans", type: "function", stateMutability: "view",
+    inputs: [{ name: "", type: "bytes32" }],
     outputs: [
-      { name: "amount",     type: "uint128" },
+      { name: "amount", type: "uint128" },
       { name: "collateral", type: "uint128" },
-      { name: "dueBlock",   type: "uint64"  },
-      { name: "active",     type: "bool"    },
-    ],
-    stateMutability: "view",
-  },
-  {
-    name: "tier",
-    type: "function",
-    inputs: [{ name: "borrower", type: "address" }],
-    outputs: [{ name: "", type: "uint8" }],
-    stateMutability: "view",
-  },
-  {
-    name: "maxLoan",
-    type: "function",
-    inputs: [{ name: "borrower", type: "address" }],
-    outputs: [{ name: "", type: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    name: "collateralBps",
-    type: "function",
-    inputs: [{ name: "borrower", type: "address" }],
-    outputs: [{ name: "", type: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    name: "ScoreSet",
-    type: "event",
-    inputs: [
-      { name: "borrower", type: "address", indexed: true  },
-      { name: "score",    type: "uint256", indexed: false },
+      { name: "dueBlock", type: "uint64" },
+      { name: "active", type: "bool" },
     ],
   },
   {
-    name: "LoanRequested",
-    type: "event",
+    name: "defaulted", type: "function", stateMutability: "view",
+    inputs: [{ name: "", type: "bytes32" }], outputs: [{ name: "", type: "bool" }],
+  },
+  {
+    name: "ScoreSet", type: "event",
     inputs: [
-      { name: "borrower",   type: "address", indexed: true  },
-      { name: "amount",     type: "uint256", indexed: false },
+      { name: "identityId", type: "bytes32", indexed: true },
+      { name: "wallet", type: "address", indexed: true },
+      { name: "score", type: "uint256", indexed: false },
+      { name: "proofNonce", type: "bytes32", indexed: false },
+    ],
+  },
+  {
+    name: "LoanRequested", type: "event",
+    inputs: [
+      { name: "identityId", type: "bytes32", indexed: true },
+      { name: "wallet", type: "address", indexed: true },
+      { name: "amount", type: "uint256", indexed: false },
       { name: "collateral", type: "uint256", indexed: false },
     ],
-  },
-  {
-    name: "LoanRepaid",
-    type: "event",
-    inputs: [{ name: "borrower", type: "address", indexed: true }],
   },
 ] as const;
