@@ -102,7 +102,7 @@ export default function DappPage() {
           <p className="text-zinc-500 mt-1">Borrow ETH on Base against your GitHub contribution history.</p>
         </div>
 
-        <div className={`rounded-xl border p-5 bg-white ${githubConnected ? "border-green-200" : "border-zinc-200"}`}>
+        <div className={`rounded-xl border p-5 bg-white ${githubConnected ? "border-blue-200" : "border-zinc-200"}`}>
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">1. Connect GitHub</p>
@@ -111,7 +111,7 @@ export default function DappPage() {
               </p>
             </div>
             {githubConnected ? (
-              <span className="text-green-600 text-sm font-medium">Connected</span>
+              <span className="text-blue-600 text-sm font-medium">Connected</span>
             ) : (
               <button
                 onClick={() => signIn("github")}
@@ -123,7 +123,7 @@ export default function DappPage() {
           </div>
         </div>
 
-        <div className={`rounded-xl border p-5 bg-white ${walletConnected ? "border-green-200" : "border-zinc-200"}`}>
+        <div className={`rounded-xl border p-5 bg-white ${walletConnected ? "border-blue-200" : "border-zinc-200"}`}>
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">2. Connect Wallet</p>

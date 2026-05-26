@@ -65,7 +65,7 @@ export function LoanPanel({ address: _address, breakdown, activeLoan, onTxHash }
             })
           }
           disabled={isPending}
-          className="w-full rounded-lg bg-green-600 py-3 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50 transition-colors"
+          className="w-full rounded-lg bg-blue-600 py-3 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
         >
           {isPending ? "Submitting..." : `Repay ${formatEther(repayWei)} ETH`}
         </button>

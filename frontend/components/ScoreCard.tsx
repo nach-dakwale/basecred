@@ -10,14 +10,14 @@ interface Props {
 
 const TIER_LABELS = ["No tier", "Tier 1", "Tier 2", "Tier 3", "Tier 4 (Uncollateralized)"];
 const TIER_COLORS = [
-  "text-zinc-400", "text-yellow-600", "text-blue-600", "text-purple-600", "text-green-600",
+  "text-zinc-400", "text-blue-600", "text-blue-600", "text-blue-600", "text-blue-600",
 ];
 
 function ScoreBar({ score }: { score: number }) {
   return (
     <div className="w-full rounded-full bg-zinc-100 h-3 overflow-hidden">
       <div
-        className="h-3 rounded-full bg-gradient-to-r from-yellow-400 via-blue-500 to-green-500 transition-all duration-700"
+        className="h-3 rounded-full bg-blue-600 transition-all duration-700"
         style={{ width: `${(score / 650) * 100}%` }}
       />
     </div>
