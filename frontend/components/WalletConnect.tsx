@@ -21,7 +21,7 @@ export function WalletConnect({ onAddress }: Props) {
     return (
       <button
         onClick={() => disconnect()}
-        className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+        className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-mono text-zinc-300 hover:bg-zinc-700 transition-colors"
       >
         {address.slice(0, 6)}...{address.slice(-4)}
       </button>
@@ -31,7 +31,7 @@ export function WalletConnect({ onAddress }: Props) {
   return (
     <button
       onClick={() => connect({ connector: injected() })}
-      className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+      className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 transition-colors"
     >
       Connect Wallet
     </button>

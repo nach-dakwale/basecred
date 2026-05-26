@@ -42,7 +42,6 @@ export default function DappPage() {
     query:   { enabled: !!ethAddress },
   });
 
-  // wagmi returns struct fields as a tuple: [amount, collateral, dueBlock, active]
   const loanTuple = activeLoan as readonly [bigint, bigint, bigint, boolean] | undefined;
   const activeLoanData = loanTuple?.[3]
     ? { amount: loanTuple[0], collateral: loanTuple[1], dueBlock: loanTuple[2], active: loanTuple[3] }
@@ -83,39 +82,39 @@ export default function DappPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4 flex items-center justify-between">
-        <a href="/" className="font-bold text-lg tracking-tight">BaseCred</a>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <header className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
+        <a href="/" className="font-semibold text-sm tracking-tight text-white">BaseCred</a>
         <div className="flex items-center gap-3">
           {githubConnected && (
-            <button onClick={() => signOut()} className="text-sm text-zinc-500 hover:text-zinc-800">
-              {session?.user?.name} (GitHub)
+            <button onClick={() => signOut()} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
+              {session?.user?.name}
             </button>
           )}
           <WalletConnect onAddress={setEthAddress} />
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 py-10 space-y-6">
+      <main className="mx-auto max-w-2xl px-4 py-10 space-y-4">
         <div>
-          <h1 className="text-2xl font-bold">Developer Credit</h1>
-          <p className="text-zinc-500 mt-1">Borrow ETH on Base against your GitHub contribution history.</p>
+          <h1 className="text-xl font-semibold text-white">Developer Credit</h1>
+          <p className="text-sm text-zinc-500 mt-0.5">Borrow ETH on Base against your GitHub contribution history.</p>
         </div>
 
-        <div className={`rounded-xl border p-5 bg-white ${githubConnected ? "border-blue-200" : "border-zinc-200"}`}>
+        <div className={`rounded-lg border p-4 bg-zinc-900 ${githubConnected ? "border-blue-800" : "border-zinc-800"}`}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">1. Connect GitHub</p>
-              <p className="text-sm text-zinc-500 mt-0.5">
+              <p className="text-sm font-medium text-white">1. Connect GitHub</p>
+              <p className="text-xs text-zinc-500 mt-0.5">
                 We read your public contribution history to calculate your credit score.
               </p>
             </div>
             {githubConnected ? (
-              <span className="text-blue-600 text-sm font-medium">Connected</span>
+              <span className="text-blue-400 text-xs font-medium">Connected</span>
             ) : (
               <button
                 onClick={() => signIn("github")}
-                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 transition-colors"
+                className="rounded-md bg-zinc-800 border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 transition-colors"
               >
                 Connect GitHub
               </button>
@@ -123,11 +122,11 @@ export default function DappPage() {
           </div>
         </div>
 
-        <div className={`rounded-xl border p-5 bg-white ${walletConnected ? "border-blue-200" : "border-zinc-200"}`}>
+        <div className={`rounded-lg border p-4 bg-zinc-900 ${walletConnected ? "border-blue-800" : "border-zinc-800"}`}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">2. Connect Wallet</p>
-              <p className="text-sm text-zinc-500 mt-0.5">MetaMask or Coinbase Wallet on Base Sepolia.</p>
+              <p className="text-sm font-medium text-white">2. Connect Wallet</p>
+              <p className="text-xs text-zinc-500 mt-0.5">MetaMask or Coinbase Wallet on Base Sepolia.</p>
             </div>
             <WalletConnect onAddress={setEthAddress} />
           </div>
@@ -141,7 +140,7 @@ export default function DappPage() {
           <button
             onClick={submitScoreOnChain}
             disabled={oracleLoading}
-            className="w-full rounded-xl bg-blue-600 py-3 font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            className="w-full rounded-md bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
           >
             {oracleLoading ? "Submitting score on-chain..." : "Verify Score On-Chain"}
           </button>
@@ -153,7 +152,7 @@ export default function DappPage() {
               <button
                 onClick={submitScoreOnChain}
                 disabled={oracleLoading}
-                className="w-full rounded-lg border border-zinc-200 py-2 text-sm text-zinc-500 hover:text-zinc-800 disabled:opacity-50 transition-colors"
+                className="w-full rounded-md border border-zinc-700 py-2 text-xs text-zinc-500 hover:text-zinc-300 disabled:opacity-50 transition-colors"
               >
                 {oracleLoading ? "Refreshing..." : "Refresh On-Chain Score"}
               </button>
@@ -168,14 +167,14 @@ export default function DappPage() {
         )}
 
         {recentTx && (
-          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm">
-            <p className="font-medium text-blue-800">Transaction submitted</p>
-            <p className="text-blue-600 font-mono text-xs mt-1 break-all">{recentTx}</p>
+          <div className="rounded-lg border border-blue-800 bg-blue-950/40 p-4 text-sm">
+            <p className="font-medium text-blue-300">Transaction submitted</p>
+            <p className="text-blue-400 font-mono text-xs mt-1 break-all">{recentTx}</p>
             <a
               href={`https://sepolia.basescan.org/tx/${recentTx}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-700 underline text-xs mt-1 inline-block"
+              className="text-blue-500 underline text-xs mt-1 inline-block hover:text-blue-400"
             >
               View on BaseScan
             </a>

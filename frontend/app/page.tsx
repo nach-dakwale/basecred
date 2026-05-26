@@ -2,41 +2,41 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
-      <header className="border-b border-zinc-200 bg-white px-6 py-4 flex items-center justify-between">
-        <span className="font-bold text-lg tracking-tight">BaseCred</span>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <header className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
+        <span className="font-semibold text-sm tracking-tight text-white">BaseCred</span>
         <Link
           href="/dapp"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-500 transition-colors"
         >
           Launch App
         </Link>
       </header>
 
       <main className="mx-auto max-w-3xl px-6 py-24 space-y-16">
-        <section className="space-y-6">
-          <div className="inline-block rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs text-blue-600">
+        <section className="space-y-5">
+          <span className="inline-flex items-center rounded border border-zinc-700 bg-zinc-900 px-2 py-0.5 text-xs font-mono text-zinc-400">
             Base Sepolia Testnet
-          </div>
-          <h1 className="text-5xl font-bold leading-tight tracking-tight">
+          </span>
+          <h1 className="text-5xl font-bold leading-tight tracking-tight text-white">
             Borrow ETH with your
             <br />
             GitHub reputation
           </h1>
-          <p className="text-xl text-zinc-500 max-w-xl">
+          <p className="text-lg text-zinc-400 max-w-xl leading-relaxed">
             BaseCred scores your open-source contribution history and issues
             undercollateralized loans on Base. No credit bureau. No identity verification.
             Just code.
           </p>
           <Link
             href="/dapp"
-            className="inline-block rounded-xl bg-blue-600 px-8 py-4 text-lg font-medium hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 transition-colors"
           >
             Check my score
           </Link>
         </section>
 
-        <section className="grid grid-cols-3 gap-6">
+        <section className="grid grid-cols-3 gap-4">
           {[
             {
               title: "Score based on web3 contributions",
@@ -51,37 +51,37 @@ export default function Home() {
               body: "Your score lives on Base. Repay on time to keep it. Default and it resets.",
             },
           ].map((card) => (
-            <div key={card.title} className="rounded-xl border border-zinc-200 bg-white p-5 space-y-2">
-              <p className="font-semibold text-sm">{card.title}</p>
-              <p className="text-sm text-zinc-500">{card.body}</p>
+            <div key={card.title} className="rounded-lg border border-zinc-800 bg-zinc-900 p-4 space-y-2">
+              <p className="font-medium text-sm text-white">{card.title}</p>
+              <p className="text-sm text-zinc-400 leading-relaxed">{card.body}</p>
             </div>
           ))}
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-2xl font-bold">Score tiers</h2>
-          <div className="rounded-xl border border-zinc-200 overflow-hidden">
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">Score tiers</h2>
+          <div className="rounded-lg border border-zinc-800 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-zinc-200 bg-zinc-50">
-                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Tier</th>
-                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Score</th>
-                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Max Loan</th>
-                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Collateral</th>
+                <tr className="border-b border-zinc-800 bg-zinc-900">
+                  <th className="text-left px-4 py-2.5 text-xs font-medium text-zinc-500 uppercase tracking-wider">Tier</th>
+                  <th className="text-left px-4 py-2.5 text-xs font-medium text-zinc-500 uppercase tracking-wider">Score</th>
+                  <th className="text-left px-4 py-2.5 text-xs font-medium text-zinc-500 uppercase tracking-wider">Max Loan</th>
+                  <th className="text-left px-4 py-2.5 text-xs font-medium text-zinc-500 uppercase tracking-wider">Collateral</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 bg-white">
+              <tbody className="divide-y divide-zinc-800">
                 {[
-                  { tier: "1", score: "201-350", loan: "0.05 ETH", col: "100%" },
-                  { tier: "2", score: "351-500", loan: "0.15 ETH", col:  "50%" },
-                  { tier: "3", score: "501-600", loan: "0.40 ETH", col:  "20%" },
-                  { tier: "4", score: "601-650", loan: "0.75 ETH", col: "None" },
+                  { tier: "1", score: "201–350", loan: "0.05 ETH", col: "100%" },
+                  { tier: "2", score: "351–500", loan: "0.15 ETH", col:  "50%" },
+                  { tier: "3", score: "501–600", loan: "0.40 ETH", col:  "20%" },
+                  { tier: "4", score: "601–650", loan: "0.75 ETH", col: "None" },
                 ].map((row) => (
-                  <tr key={row.tier}>
-                    <td className="px-4 py-3">Tier {row.tier}</td>
-                    <td className="px-4 py-3 font-mono">{row.score}</td>
-                    <td className="px-4 py-3 font-semibold">{row.loan}</td>
-                    <td className={`px-4 py-3 ${row.col === "None" ? "text-blue-600 font-medium" : "text-zinc-500"}`}>
+                  <tr key={row.tier} className="hover:bg-zinc-900/50 transition-colors">
+                    <td className="px-4 py-3 text-zinc-300">Tier {row.tier}</td>
+                    <td className="px-4 py-3 font-mono text-zinc-300">{row.score}</td>
+                    <td className="px-4 py-3 font-medium text-white">{row.loan}</td>
+                    <td className={`px-4 py-3 font-mono ${row.col === "None" ? "text-blue-400" : "text-zinc-400"}`}>
                       {row.col}
                     </td>
                   </tr>
@@ -92,7 +92,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-zinc-200 px-6 py-6 text-center text-xs text-zinc-400">
+      <footer className="border-t border-zinc-800 px-6 py-6 text-center text-xs text-zinc-600">
         BaseCred is a proof of concept on Base Sepolia testnet. Not financial advice.
       </footer>
     </div>
