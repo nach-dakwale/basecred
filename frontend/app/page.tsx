@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
-      <header className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-zinc-50 text-zinc-900">
+      <header className="border-b border-zinc-200 bg-white px-6 py-4 flex items-center justify-between">
         <span className="font-bold text-lg tracking-tight">BaseCred</span>
         <Link
           href="/dapp"
@@ -15,7 +15,7 @@ export default function Home() {
 
       <main className="mx-auto max-w-3xl px-6 py-24 space-y-16">
         <section className="space-y-6">
-          <div className="inline-block rounded-full bg-blue-600/10 border border-blue-500/20 px-3 py-1 text-xs text-blue-400">
+          <div className="inline-block rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs text-blue-600">
             Base Sepolia Testnet
           </div>
           <h1 className="text-5xl font-bold leading-tight tracking-tight">
@@ -23,7 +23,7 @@ export default function Home() {
             <br />
             GitHub reputation
           </h1>
-          <p className="text-xl text-zinc-400 max-w-xl">
+          <p className="text-xl text-zinc-500 max-w-xl">
             BaseCred scores your open-source contribution history and issues
             undercollateralized loans on Base. No credit bureau. No identity verification.
             Just code.
@@ -51,26 +51,26 @@ export default function Home() {
               body: "Your score lives on Base. Repay on time to keep it. Default and it resets.",
             },
           ].map((card) => (
-            <div key={card.title} className="rounded-xl border border-zinc-800 bg-zinc-900 p-5 space-y-2">
+            <div key={card.title} className="rounded-xl border border-zinc-200 bg-white p-5 space-y-2">
               <p className="font-semibold text-sm">{card.title}</p>
-              <p className="text-sm text-zinc-400">{card.body}</p>
+              <p className="text-sm text-zinc-500">{card.body}</p>
             </div>
           ))}
         </section>
 
         <section className="space-y-4">
           <h2 className="text-2xl font-bold">Score tiers</h2>
-          <div className="rounded-xl border border-zinc-800 overflow-hidden">
+          <div className="rounded-xl border border-zinc-200 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-zinc-800 bg-zinc-900">
-                  <th className="text-left px-4 py-3 text-zinc-400 font-medium">Tier</th>
-                  <th className="text-left px-4 py-3 text-zinc-400 font-medium">Score</th>
-                  <th className="text-left px-4 py-3 text-zinc-400 font-medium">Max Loan</th>
-                  <th className="text-left px-4 py-3 text-zinc-400 font-medium">Collateral</th>
+                <tr className="border-b border-zinc-200 bg-zinc-50">
+                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Tier</th>
+                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Score</th>
+                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Max Loan</th>
+                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Collateral</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800">
+              <tbody className="divide-y divide-zinc-100 bg-white">
                 {[
                   { tier: "1", score: "201-350", loan: "0.05 ETH", col: "100%" },
                   { tier: "2", score: "351-500", loan: "0.15 ETH", col:  "50%" },
@@ -81,7 +81,7 @@ export default function Home() {
                     <td className="px-4 py-3">Tier {row.tier}</td>
                     <td className="px-4 py-3 font-mono">{row.score}</td>
                     <td className="px-4 py-3 font-semibold">{row.loan}</td>
-                    <td className={`px-4 py-3 ${row.col === "None" ? "text-green-400 font-medium" : "text-zinc-300"}`}>
+                    <td className={`px-4 py-3 ${row.col === "None" ? "text-blue-600 font-medium" : "text-zinc-500"}`}>
                       {row.col}
                     </td>
                   </tr>
@@ -92,7 +92,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-zinc-800 px-6 py-6 text-center text-xs text-zinc-600">
+      <footer className="border-t border-zinc-200 px-6 py-6 text-center text-xs text-zinc-400">
         BaseCred is a proof of concept on Base Sepolia testnet. Not financial advice.
       </footer>
     </div>
