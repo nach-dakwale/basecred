@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useEffect, useRef, useState } from "react";
+import { useBlockNumber, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseEther, formatEther } from "viem";
 import { baseSepolia } from "wagmi/chains";
 import { ABI, CONTRACT_ADDRESS } from "@/lib/contract";
@@ -17,24 +17,52 @@ interface ActiveLoan {
 interface Props {
   address:    string;
   breakdown:  ScoreBreakdown | null;
-  activeLoan: ActiveLoan | null;
   onTxHash:   (hash: string) => void;
 }
 
-export function LoanPanel({ address: _address, breakdown, activeLoan, onTxHash }: Props) {
-  const [amount, setAmount] = useState("");
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+const INTEREST_BPS = 1000n;
+const BPS_DENOMINATOR = 10000n;
+const BLOCK_TIME_SECONDS = 2;
 
-  useWaitForTransactionReceipt({
+export function LoanPanel({ address, breakdown, onTxHash }: Props) {
+  const [amount, setAmount] = useState("");
+  const handledHash = useRef<string | undefined>(undefined);
+  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { data: loan, refetch: refetchLoan } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: ABI,
+    functionName: "loans",
+    args: [address as `0x${string}`],
+  });
+  const { data: currentBlock } = useBlockNumber({ chainId: baseSepolia.id, watch: true });
+
+  const loanTuple = loan as readonly [bigint, bigint, bigint, boolean] | undefined;
+  const activeLoan: ActiveLoan | null = loanTuple?.[3]
+    ? { amount: loanTuple[0], collateral: loanTuple[1], dueBlock: loanTuple[2], active: loanTuple[3] }
+    : null;
+
+  const { isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
-    query: {
-      enabled: !!hash,
-      select: () => { if (hash) onTxHash(hash); },
-    },
+    query: { enabled: !!hash },
   });
 
+  useEffect(() => {
+    if (!hash || !isConfirmed || handledHash.current === hash) return;
+    handledHash.current = hash;
+    onTxHash(hash);
+    void refetchLoan();
+  }, [hash, isConfirmed, onTxHash, refetchLoan]);
+
   if (activeLoan?.active) {
-    const repayWei = activeLoan.amount + activeLoan.amount / 10n;
+    const interestWei = (activeLoan.amount * INTEREST_BPS) / BPS_DENOMINATOR;
+    const repayWei = activeLoan.amount + interestWei;
+    const remainingBlocks = currentBlock !== undefined && activeLoan.dueBlock > currentBlock
+      ? activeLoan.dueBlock - currentBlock
+      : 0n;
+    const dueDate = currentBlock !== undefined
+      ? new Date(Date.now() + Number(remainingBlocks) * BLOCK_TIME_SECONDS * 1000)
+      : null;
+
     return (
       <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-5 space-y-4 text-zinc-100">
         <h2 className="text-sm font-semibold text-white">Active Loan</h2>
@@ -44,13 +72,18 @@ export function LoanPanel({ address: _address, breakdown, activeLoan, onTxHash }
             <p className="font-medium text-white mt-0.5">{formatEther(activeLoan.amount)} ETH</p>
           </div>
           <div className="rounded-md bg-zinc-800/60 border border-zinc-700/50 p-3">
-            <p className="text-xs text-zinc-500">Collateral locked</p>
-            <p className="font-medium text-white mt-0.5">{formatEther(activeLoan.collateral)} ETH</p>
+            <p className="text-xs text-zinc-500">Interest owed (10%)</p>
+            <p className="font-medium text-white mt-0.5">{formatEther(interestWei)} ETH</p>
           </div>
           <div className="rounded-md bg-zinc-800/60 border border-zinc-700/50 p-3 col-span-2">
             <p className="text-xs text-zinc-500">Total repayment due</p>
             <p className="font-semibold text-white mt-0.5">{formatEther(repayWei)} ETH</p>
-            <p className="text-xs text-zinc-600 mt-0.5">Due at block {activeLoan.dueBlock.toString()}</p>
+            <p className="text-xs text-zinc-500 mt-2">Estimated due date</p>
+            <p className="text-xs text-zinc-400 mt-0.5">
+              {dueDate
+                ? dueDate.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })
+                : `Block ${activeLoan.dueBlock.toString()}`}
+            </p>
           </div>
         </div>
         {error && <p className="text-xs text-red-400">{error.message}</p>}

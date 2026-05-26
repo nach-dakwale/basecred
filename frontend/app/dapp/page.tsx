@@ -34,7 +34,7 @@ export default function DappPage() {
   const walletConnected  = !!ethAddress;
   const scoreSubmitted   = !!breakdown;
 
-  const { data: activeLoan } = useReadContract({
+  const { data: activeLoan, refetch: refetchActiveLoan } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi:     ABI,
     functionName: "loans",
@@ -160,8 +160,10 @@ export default function DappPage() {
             <LoanPanel
               address={ethAddress!}
               breakdown={breakdown}
-              activeLoan={activeLoanData}
-              onTxHash={(hash: string) => setRecentTx(hash)}
+              onTxHash={(hash: string) => {
+                setRecentTx(hash);
+                void refetchActiveLoan();
+              }}
             />
           </>
         )}

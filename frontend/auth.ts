@@ -12,13 +12,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, profile }) {
       if (account?.access_token) token.githubAccessToken = account.access_token;
+      const githubLogin = (profile as { login?: unknown } | undefined)?.login;
+      if (typeof githubLogin === "string") token.githubLogin = githubLogin;
       return token;
     },
     async session({ session, token }) {
-      (session as { githubAccessToken?: string }).githubAccessToken =
-        token.githubAccessToken as string | undefined;
+      const githubSession = session as { githubAccessToken?: string; githubLogin?: string };
+      githubSession.githubAccessToken = token.githubAccessToken as string | undefined;
+      githubSession.githubLogin = token.githubLogin as string | undefined;
       return session;
     },
   },

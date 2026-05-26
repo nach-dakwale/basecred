@@ -22,23 +22,34 @@ contract GitHubLoanPool {
 
     uint256 public constant INTEREST_BPS  = 1000;   // 10%
     uint256 public constant LOAN_BLOCKS   = 216000; // ~30 days (2s blocks on Base)
+    uint256 public constant SCORE_TTL     = 7 days;
 
     mapping(address => uint256) public scores;
+    mapping(address => uint256) public scoreSetAt;
     mapping(address => Loan)    public loans;
+    bool public paused;
 
     event ScoreSet(address indexed borrower, uint256 score);
     event LoanRequested(address indexed borrower, uint256 amount, uint256 collateral);
     event LoanRepaid(address indexed borrower);
+    event LoanLiquidated(address indexed borrower, uint256 amount, uint256 collateral);
+    event PoolWithdrawn(address indexed owner, uint256 amount);
+    event PoolPaused();
+    event PoolUnpaused();
     event Deposited(address indexed sender, uint256 amount);
 
     error NotOracle();
+    error NotOwner();
     error AlreadyHasLoan();
     error ScoreTooLow();
+    error ScoreExpired();
     error ExceedsMaxLoan();
     error InsufficientCollateral();
     error InsufficientRepayment();
     error NoActiveLoan();
+    error LoanNotDue();
     error PoolInsufficientFunds();
+    error Paused();
 
     constructor(address _oracle) {
         oracle = _oracle;
@@ -48,6 +59,7 @@ contract GitHubLoanPool {
     function setScore(address borrower, uint256 score) external {
         if (msg.sender != oracle) revert NotOracle();
         scores[borrower] = score;
+        scoreSetAt[borrower] = block.timestamp;
         emit ScoreSet(borrower, score);
     }
 
@@ -78,9 +90,11 @@ contract GitHubLoanPool {
     }
 
     function requestLoan(uint256 amount) external payable {
+        if (paused)                      revert Paused();
         if (loans[msg.sender].active)    revert AlreadyHasLoan();
         uint256 max = maxLoan(msg.sender);
         if (max == 0)                    revert ScoreTooLow();
+        if (block.timestamp - scoreSetAt[msg.sender] > SCORE_TTL) revert ScoreExpired();
         if (amount > max)                revert ExceedsMaxLoan();
 
         uint256 colNeeded = (amount * collateralBps(msg.sender)) / 10000;
@@ -115,6 +129,38 @@ contract GitHubLoanPool {
         if (colReturn > 0) payable(msg.sender).transfer(colReturn);
         uint256 overpaid = msg.value - due;
         if (overpaid > 0) payable(msg.sender).transfer(overpaid);
+    }
+
+    function liquidate(address borrower) external {
+        Loan storage loan = loans[borrower];
+        if (!loan.active) revert NoActiveLoan();
+        if (block.number <= loan.dueBlock) revert LoanNotDue();
+
+        uint256 amount = loan.amount;
+        uint256 collateral = loan.collateral;
+        loan.active = false;
+        loan.amount = 0;
+        loan.collateral = 0;
+
+        emit LoanLiquidated(borrower, amount, collateral);
+    }
+
+    function withdrawPool(uint256 amount) external {
+        if (msg.sender != owner) revert NotOwner();
+        emit PoolWithdrawn(msg.sender, amount);
+        payable(owner).transfer(amount);
+    }
+
+    function pause() external {
+        if (msg.sender != owner) revert NotOwner();
+        paused = true;
+        emit PoolPaused();
+    }
+
+    function unpause() external {
+        if (msg.sender != owner) revert NotOwner();
+        paused = false;
+        emit PoolUnpaused();
     }
 
     receive() external payable {
