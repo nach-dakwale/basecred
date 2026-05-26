@@ -39,9 +39,9 @@ const TIERS = [
 ] as const;
 
 function ageBonusPts(years: number): number {
-  if (years >= 5) return 50;
-  if (years >= 3) return 30;
-  if (years >= 1) return 10;
+  if (years >= 5) return 200;
+  if (years >= 3) return 100;
+  if (years >= 1) return 30;
   return 0;
 }
 
@@ -60,7 +60,7 @@ export function calculateScore(data: GitHubData): ScoreBreakdown {
     ossPoints,
     personalPoints,
     ageBonus,
-    tier:          tier ? (TIERS.indexOf(tier) + 1 as 1 | 2 | 3 | 4) : 0,
+    tier:          tier ? ((TIERS.length - TIERS.indexOf(tier)) as 1 | 2 | 3 | 4) : 0,
     maxLoanEth:    tier?.maxLoanEth    ?? 0,
     collateralPct: tier?.collateralPct ?? 0,
   };

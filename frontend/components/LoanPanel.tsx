@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseEther, formatEther } from "viem";
+import { baseSepolia } from "wagmi/chains";
 import { ABI, CONTRACT_ADDRESS } from "@/lib/contract";
 import type { ScoreBreakdown } from "@/lib/scoring";
 
@@ -60,6 +61,7 @@ export function LoanPanel({ address: _address, breakdown, activeLoan, onTxHash }
               abi: ABI,
               functionName: "repayLoan",
               value: repayWei,
+              chain: baseSepolia,
             })
           }
           disabled={isPending}
@@ -122,6 +124,7 @@ export function LoanPanel({ address: _address, breakdown, activeLoan, onTxHash }
                 functionName: "requestLoan",
                 args: [parseEther(amount as `${number}`)],
                 value: colWei,
+                chain: baseSepolia,
               });
             }}
             disabled={isPending || !amount || amountNum <= 0 || amountNum > maxEth}
