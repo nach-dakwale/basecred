@@ -2,22 +2,23 @@ export const dynamic = "force-dynamic";
 
 import { formatEther } from "viem";
 import {
-  adminClient, CONTRACT, ORACLE_WALLET, ORACLE_LOW_BALANCE_THRESHOLD,
+  getAdminClient, CONTRACT, ORACLE_WALLET, ORACLE_LOW_BALANCE_THRESHOLD,
   ADMIN_ABI, EVENT_LOAN_REQUESTED, EVENT_LOAN_REPAID, EVENT_LOAN_LIQUIDATED,
 } from "@/lib/admin-chain";
 import { PUBLIC_NETWORK } from "@/lib/network";
 
 async function fetchOverview() {
+  const client = getAdminClient();
   const [poolBalance, oracleBalance, outstandingPrincipal, loanRequested, loanRepaid, loanLiquidated] =
     await Promise.all([
-      adminClient.getBalance({ address: CONTRACT }),
-      adminClient.getBalance({ address: ORACLE_WALLET }),
-      adminClient.readContract({
+      client.getBalance({ address: CONTRACT }),
+      client.getBalance({ address: ORACLE_WALLET }),
+      client.readContract({
         address: CONTRACT, abi: ADMIN_ABI, functionName: "totalOutstandingPrincipal",
       }),
-      adminClient.getLogs({ address: CONTRACT, event: EVENT_LOAN_REQUESTED, fromBlock: 0n }),
-      adminClient.getLogs({ address: CONTRACT, event: EVENT_LOAN_REPAID, fromBlock: 0n }),
-      adminClient.getLogs({ address: CONTRACT, event: EVENT_LOAN_LIQUIDATED, fromBlock: 0n }),
+      client.getLogs({ address: CONTRACT, event: EVENT_LOAN_REQUESTED, fromBlock: 0n }),
+      client.getLogs({ address: CONTRACT, event: EVENT_LOAN_REPAID, fromBlock: 0n }),
+      client.getLogs({ address: CONTRACT, event: EVENT_LOAN_LIQUIDATED, fromBlock: 0n }),
     ]);
 
   const closedIds = new Set([

@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { formatEther } from "viem";
 import {
-  adminClient, CONTRACT, ADMIN_ABI,
+  getAdminClient, CONTRACT, ADMIN_ABI,
   EVENT_LOAN_REQUESTED, EVENT_LOAN_REPAID, EVENT_LOAN_LIQUIDATED,
 } from "@/lib/admin-chain";
 import { PUBLIC_NETWORK } from "@/lib/network";
@@ -37,10 +37,11 @@ function shortAddr(addr: string) {
 }
 
 async function fetchLoans(): Promise<LoanRow[]> {
+  const client = getAdminClient();
   const [requested, repaid, liquidated] = await Promise.all([
-    adminClient.getLogs({ address: CONTRACT, event: EVENT_LOAN_REQUESTED, fromBlock: 0n }),
-    adminClient.getLogs({ address: CONTRACT, event: EVENT_LOAN_REPAID, fromBlock: 0n }),
-    adminClient.getLogs({ address: CONTRACT, event: EVENT_LOAN_LIQUIDATED, fromBlock: 0n }),
+    client.getLogs({ address: CONTRACT, event: EVENT_LOAN_REQUESTED, fromBlock: 0n }),
+    client.getLogs({ address: CONTRACT, event: EVENT_LOAN_REPAID, fromBlock: 0n }),
+    client.getLogs({ address: CONTRACT, event: EVENT_LOAN_LIQUIDATED, fromBlock: 0n }),
   ]);
 
   const repaidIds = new Set(repaid.map((e) => e.args.identityId));
@@ -50,11 +51,11 @@ async function fetchLoans(): Promise<LoanRow[]> {
     requested.map(async (e) => {
       const identityId = e.args.identityId as `0x${string}`;
       const wallet = e.args.wallet as `0x${string}`;
-      const loan = await adminClient.readContract({
+      const loan = await client.readContract({
         address: CONTRACT, abi: ADMIN_ABI, functionName: "loans",
         args: [identityId],
       });
-      const isDefaulted = await adminClient.readContract({
+      const isDefaulted = await client.readContract({
         address: CONTRACT, abi: ADMIN_ABI, functionName: "defaulted",
         args: [identityId],
       });

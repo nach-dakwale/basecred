@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { isAddress, isHex, formatEther } from "viem";
-import { adminClient, CONTRACT, ADMIN_ABI } from "@/lib/admin-chain";
+import { getAdminClient, CONTRACT, ADMIN_ABI } from "@/lib/admin-chain";
 import { PUBLIC_NETWORK } from "@/lib/network";
 
 interface IdentityResult {
@@ -15,12 +15,13 @@ interface IdentityResult {
 }
 
 async function lookupIdentity(query: string): Promise<IdentityResult | { error: string }> {
+  const client = getAdminClient();
   let wallet: string;
   let identityId: `0x${string}`;
 
   if (isAddress(query)) {
     wallet = query;
-    identityId = await adminClient.readContract({
+    identityId = await client.readContract({
       address: CONTRACT, abi: ADMIN_ABI, functionName: "identityForWallet",
       args: [query as `0x${string}`],
     });
@@ -29,7 +30,7 @@ async function lookupIdentity(query: string): Promise<IdentityResult | { error: 
     }
   } else if (isHex(query) && query.length === 66) {
     identityId = query as `0x${string}`;
-    wallet = await adminClient.readContract({
+    wallet = await client.readContract({
       address: CONTRACT, abi: ADMIN_ABI, functionName: "walletForIdentity",
       args: [identityId],
     });
@@ -41,11 +42,11 @@ async function lookupIdentity(query: string): Promise<IdentityResult | { error: 
   }
 
   const [score, scoreSetAt, tier, loanTuple, isDefaulted] = await Promise.all([
-    adminClient.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "scores", args: [identityId] }),
-    adminClient.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "scoreSetAt", args: [identityId] }),
-    adminClient.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "tier", args: [identityId] }),
-    adminClient.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "loans", args: [identityId] }),
-    adminClient.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "defaulted", args: [identityId] }),
+    client.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "scores", args: [identityId] }),
+    client.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "scoreSetAt", args: [identityId] }),
+    client.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "tier", args: [identityId] }),
+    client.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "loans", args: [identityId] }),
+    client.readContract({ address: CONTRACT, abi: ADMIN_ABI, functionName: "defaulted", args: [identityId] }),
   ]);
 
   const [loanAmount, loanCollateral, loanDueBlock, loanActive] = loanTuple;

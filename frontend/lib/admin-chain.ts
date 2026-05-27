@@ -1,10 +1,12 @@
 import { createPublicClient, http, parseAbiItem } from "viem";
 import { PUBLIC_NETWORK, serverRpcUrl } from "./network";
 
-export const adminClient = createPublicClient({
-  chain: PUBLIC_NETWORK.chain,
-  transport: http(serverRpcUrl()),
-});
+export function getAdminClient() {
+  return createPublicClient({
+    chain: PUBLIC_NETWORK.chain,
+    transport: http(serverRpcUrl()),
+  });
+}
 
 export const CONTRACT = PUBLIC_NETWORK.contractAddress;
 
