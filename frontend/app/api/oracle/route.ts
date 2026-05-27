@@ -32,7 +32,13 @@ export async function POST(request: NextRequest) {
       PUBLIC_NETWORK.contractAddress,
       PUBLIC_NETWORK.name,
     );
-    if (!await verifyMessage({ address: challenge.wallet, message: bindingMessage(challenge), signature })) {
+    let validSignature = false;
+    try {
+      validSignature = await verifyMessage({ address: challenge.wallet, message: bindingMessage(challenge), signature });
+    } catch {
+      validSignature = false;
+    }
+    if (!validSignature) {
       auditEvent("oracle.invalid_signature", { identityId, wallet: challenge.wallet });
       return NextResponse.json({ error: "Invalid wallet proof" }, { status: 401 });
     }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { auditEvent } from "@/lib/audit";
 import { fetchAndScore } from "@/lib/scoring";
 import { allowApiRequest, requestIp } from "@/lib/rate-limit";
 import { identityIdForGitHubUser } from "@/lib/wallet-binding";
@@ -14,6 +15,7 @@ export async function GET(req: NextRequest) {
   try {
     const identityId = identityIdForGitHubUser(githubSession.githubId);
     if (!await allowApiRequest("score", identityId, requestIp(req))) {
+      auditEvent("score.rate_limited", { identityId });
       return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
     }
     const result = await fetchAndScore(githubSession.githubLogin, process.env.GITHUB_API_TOKEN);

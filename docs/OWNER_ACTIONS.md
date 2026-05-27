@@ -66,8 +66,9 @@ below.
 | Public source verification | Hardhat verification submission to Sourcify on 2026-05-27 | Partially passed: Sourcify exact full-match verified; BaseScan publication remains pending a `BASESCAN_API_KEY` entered outside Git |
 | Testnet frontend build selection | Lint, typecheck, unit tests, OpenNext `build:testnet`, and Wrangler testnet dry run on 2026-05-27 | Passed for build/config validation: fresh testnet contract and chain `84532` selected before subsequent Worker deployment |
 | Direct Sepolia contract controls | Fresh Keychain-held owner/oracle roles and a recoverable test-only borrower; public transaction receipts and state reads on 2026-05-27 | Passed for on-chain subset: proof-nonce replay rejection, active-loan second-wallet rejection, collateral reserve/repayment, withdrawal protection, pause and oracle revoke/restore; OAuth/API-specific checks pending |
-| Environment OAuth registrations | GitHub Developer Settings on 2026-05-27 | Passed for public registration: distinct `BaseCred Testnet` and `BaseCred Mainnet` applications created with their separate Worker callback URLs; client secrets pending GitHub confirmation/runtime insertion |
-| Testnet Worker deployment | Cloudflare Wrangler deployment and public page read on 2026-05-27 | Partially passed: isolated `basecred-testnet` Worker deployed and visible banner reads `Base Sepolia Testnet`; runtime secrets and authenticated flow pending |
+| Environment OAuth registrations | GitHub Developer Settings on 2026-05-27 | Passed for public registration: distinct `BaseCred Testnet` and `BaseCred Mainnet` applications created with separate Worker callback URLs; testnet credentials deployed, mainnet credentials intentionally pending |
+| Testnet Worker deployment | Cloudflare Wrangler deployment and public page read on 2026-05-27 | Passed: isolated `basecred-testnet` Worker deployed, visible banner reads `Base Sepolia Testnet`, and authenticated binding flow validated |
+| Testnet Worker runtime and OAuth flow | Wrangler secret-name listing, GitHub authorization flow, public transaction receipt, and live Worker tail on 2026-05-27 | Passed: six independent testnet secret bindings set, GitHub sign-in/score succeeded, signed binding reached the fresh contract, expired proof rejected, and invalid-proof/rate-limit audit events were visible |
 | Dependency audit | Updated `tmp` override plus `npm audit` and `npm audit --omit=dev` recheck on 2026-05-27 | Frontend full audit and contract production audit are clear; contract development/deployment tooling reports 32 residual findings (`26` low, `6` moderate) with no high/critical findings |
 
 ## Phase 1: Revoke And Rotate Exposed Credentials
@@ -81,12 +82,16 @@ below.
       oracle binding, but it was later used externally on 2026-05-27 to
       forward test funds to the fresh deployer; treat it as compromised and
       unusable going forward.
-- [ ] Rotate Auth.js/NextAuth secrets previously stored in tracked environment
-      files.
-- [ ] Rotate or replace GitHub OAuth client credentials that were stored in
-      tracked environment files.
+- [x] Rotate Auth.js/NextAuth secrets previously stored in tracked environment
+      files. A new testnet Auth secret was inserted directly through Wrangler;
+      any future mainnet secret will be independent.
+- [x] Rotate or replace GitHub OAuth client credentials that were stored in
+      tracked environment files. The testnet deployment uses a new isolated
+      OAuth app; a separately registered mainnet app is not deployed.
 - [ ] Revoke and replace any exposed GitHub server API token, if one existed.
-- [ ] Replace any previously deployed Cloudflare runtime secrets.
+- [x] Replace any previously deployed Cloudflare runtime secrets. Legacy
+      bindings were deleted and fresh testnet bindings were inserted directly
+      into the isolated Worker.
 - [x] Confirm no rotated value was entered into Git-tracked files, command
       output captured in notes, or commit messages. Fresh private values were
       retained in Keychain or local wallet storage only; public addresses are
@@ -99,9 +104,9 @@ Evidence to record without secrets:
 | Legacy unsafe contract balance | Testnet | 2026-05-26 | Public RPC read | `0 wei`; keep unfunded |
 | Privileged wallet credentials | Testnet | 2026-05-26 | Codex execution | Fresh roles generated; compromised local copies removed; legacy Worker oracle binding deleted |
 | Misrouted faucet funds at legacy EOA | Testnet | 2026-05-27 | Public RPC read | Approximately `0.02498 ETH` observed at exposed EOA `0xf4b2aB8Db0e7A1F84aCEE48D3C2e76C4a42C700A`, then forwarded externally to the fresh deployer; do not reuse this address |
-| Auth secret | Testnet |  |  |  |
-| GitHub OAuth credentials | Testnet |  |  |  |
-| Worker runtime secrets | Testnet | 2026-05-26 | Codex execution | Legacy `basecred` binding list is empty; fresh isolated Worker secrets pending deployment |
+| Auth secret | Testnet | 2026-05-27 | Codex execution | Fresh value entered directly through Wrangler secret binding |
+| GitHub OAuth credentials | Testnet | 2026-05-27 | Codex execution | New isolated OAuth app configured; superseded generated secret deleted; replacement inserted directly through Wrangler |
+| Worker runtime secrets | Testnet | 2026-05-27 | Codex execution | Legacy `basecred` binding list is empty; isolated Worker has six fresh secret bindings by name only |
 | Auth secret | Mainnet |  |  | Newly created only |
 | GitHub OAuth credentials | Mainnet |  |  | Newly created only |
 | Worker runtime secrets | Mainnet |  |  | Newly created only |
@@ -220,21 +225,21 @@ Cloudflare environment record:
 
 Before considering mainnet liquidity:
 
-- [ ] Use a test GitHub identity and wallet to sign a binding challenge and
+- [x] Use a test GitHub identity and wallet to sign a binding challenge and
       confirm a score submission succeeds on the fresh Sepolia contract.
 - [x] Confirm the same identity cannot obtain simultaneous credit through a
       second wallet. Verified on-chain with a synthetic test identity during
       an active loan; OAuth identity workflow remains pending.
-- [ ] Confirm challenge replay or an expired signature fails. The on-chain
-      proof-nonce replay rejection passed; signed challenge expiration requires
-      the isolated Worker/OAuth flow.
+- [x] Confirm challenge replay or an expired signature fails. The on-chain
+      proof-nonce replay rejection passed and a signed expired Worker proof
+      returned `400` without an on-chain write.
 - [x] Originate and repay a collateralized test loan; confirm reserved
       collateral returns correctly.
 - [ ] Validate default handling on a test identity; confirm refresh/reborrow is
       blocked after liquidation.
 - [x] Exercise owner withdrawal protection while collateral is reserved.
 - [x] Exercise `pause()`, oracle revocation/rotation, and unpause procedures.
-- [ ] Confirm API audit events and rate-limit behavior are visible in
+- [x] Confirm API audit events and rate-limit behavior are visible in
       Cloudflare logging/monitoring.
 
 Direct on-chain Sepolia evidence:
@@ -249,6 +254,9 @@ Direct on-chain Sepolia evidence:
 | Repayment and reserve release | `0x7be961856966583c2f55cf57baa3fd37b112504bdb75fa91cf8aa6251a0157c6` | Passed; final outstanding principal and reserved collateral are `0 ETH` |
 | Pause and oracle revocation | `0x5877de9f572dc7e03b5243e57915b60f0a21eaf912b72d6617fd5fb0165abff3`, `0x8eb4bdb9bdc05959ea4a0a92c279fcbf39abdcf0a005cd15509c17d4ebcbeb12` | Passed; revoked oracle write rejected |
 | Oracle restoration and unpause | `0x0bb491ea3102404a398a620f718a247e9bd7eb5b0ed921b2801bf421084406f3`, `0xde73c2c12df328189028ee0315c64ea3cb11a89dcf33c42085f62768208a4c02` | Passed; final oracle restored and final paused state is `false` |
+| Live GitHub OAuth score binding | `0x8ddd39c3748cb56e0ea5379f1c0239183bf4f9b3f713702763754c855589ed4a` | Passed; deployed Worker authenticated a GitHub identity and bound score `216` to the fresh testnet wallet |
+| Signed expired proof rejection | Live Worker response on 2026-05-27 | Passed; signed expired proof returned `400` with no transaction |
+| Worker audit and rate limit | Live Wrangler tail plus repeated score API calls on 2026-05-27 | Passed; invalid wallet proof returned `401`, rate-limited calls returned `429`, and `oracle.invalid_signature` / `score.rate_limited` events were visible |
 
 ## Phase 6: Monitoring And Incident Readiness
 
@@ -304,23 +312,21 @@ Approval record:
 ## Current Blockers
 
 - The legacy Worker secret bindings and local compromised environment copies
-  have been removed. Distinct GitHub OAuth applications now exist, but GitHub
-  requires interactive confirmation to generate their new client secrets;
-  fresh Auth/OAuth/optional API token runtime secrets remain pending.
+  have been removed. Distinct GitHub OAuth applications now exist, and the
+  deployed testnet Worker uses fresh runtime/OAuth bindings. Mainnet runtime
+  bindings remain intentionally unset until its approvals/configuration exist.
 - Fresh testnet roles and a separate unfunded mainnet oracle are recorded.
   Approved mainnet multisig ownership, production RPC provider selection,
   mainnet exposure cap, and alert destinations remain pending.
 - A fresh Sepolia contract is deployed and Sourcify full-match verified.
   BaseScan source publication still requires a `BASESCAN_API_KEY` entered
-  outside Git. The isolated testnet Worker is deployed but cannot be used for
-  authenticated/oracle operations until fresh OAuth and Worker secrets are
-  entered through provider interfaces.
+  outside Git. The isolated testnet Worker is deployed and authenticated
+  scoring/binding has been validated.
 - Direct on-chain Sepolia controls have passed for binding/replay protection,
   active-loan wallet rejection, repayment/reserves, withdrawal protection, and
-  pause/oracle restoration. OAuth-bound signature expiration, API audit and
-  rate-limit validation, default timing, monitoring setup, and the full
-  incident workflow still require the isolated testnet Worker and operational
-  accounts.
+  pause/oracle restoration, signed expiration rejection, and Worker API audit
+  / rate-limit behavior. Default timing, monitoring setup, and the full
+  incident workflow remain pending.
 - Frontend dependency audit findings were remediated to zero. Contract runtime
   has no production dependency findings; after updating the patched `tmp`
   override, its development/deployment tooling retains 32 low/moderate
