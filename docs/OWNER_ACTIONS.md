@@ -42,12 +42,13 @@ through Git-tracked files or chat transcripts containing secret values:
 | Initial pool funding | Faucet/test funds only | Amount approved at final go-live gate |
 | Alert destinations | Test notification route | Production monitored notification route |
 
-## Execution Evidence: 2026-05-26
+## Execution Evidence: 2026-05-26 To 2026-05-27
 
-The following checks were completed without inspecting local secret values,
-deploying contracts or Workers, or transferring funds. Owner-controlled
-actions requiring credentials, external configuration, signatures, or
-approval remain unchecked below.
+The following checks were completed without inspecting or recording secret
+values. The recorded testnet deployment used fresh Keychain-held roles; no
+Worker or mainnet contract has been deployed. Owner-controlled actions
+requiring external configuration, signatures, or approval remain unchecked
+below.
 
 | Validation | Non-secret evidence | Result |
 | --- | --- | --- |
@@ -60,17 +61,23 @@ approval remain unchecked below.
 | Cloudflare legacy containment | Wrangler secret deletion and local ignored-file removal | Passed: legacy `basecred` secret binding list is empty; legacy ignored environment copies were removed without reading their values |
 | Cloudflare separation | Read-only Wrangler environment inspection | In progress: intended `basecred-testnet` and `basecred-mainnet` Workers do not yet exist |
 | Fresh signer creation | Independent private keys generated in memory and stored only in macOS Keychain | Passed for testnet deployer/owner/oracle and mainnet oracle; public addresses recorded below |
-| Fresh testnet deployer funding | Public Base Sepolia and Ethereum Sepolia RPC balance reads; Base-listed faucet attempts using the public deployer address only; Base Sepolia recheck on 2026-05-27 | Blocked: fresh deployer remains at `0 ETH`; the compromised legacy EOA received approximately `0.02498 ETH` and will not be used for a transfer or fresh deployment |
-| Dependency audit | Overrides plus `npm audit` and `npm audit --omit=dev` | Improved: frontend full audit is clear; contract production audit is clear; contract tooling retains 32 low/moderate findings and no high/critical findings |
+| Fresh testnet deployer funding | Public Base Sepolia RPC balance reads on 2026-05-27 | Passed for testnet deployment gas: fresh deployer received approximately `0.02498 ETH`; funding was forwarded externally from the exposed legacy EOA and does not remediate its compromise |
+| Fresh Sepolia deployment | Public Base Sepolia transaction receipt and contract state reads on 2026-05-27 | Passed: fresh contract deployed with intended test-only roles and `0.01 ETH` cap; initial contract balance is `0 ETH` |
+| Public source verification | Hardhat verification submission to Sourcify on 2026-05-27 | Partially passed: Sourcify exact full-match verified; BaseScan publication remains pending a `BASESCAN_API_KEY` entered outside Git |
+| Testnet frontend build selection | Lint, typecheck, unit tests, OpenNext `build:testnet`, and Wrangler testnet dry run on 2026-05-27 | Passed for build/config validation: fresh testnet contract and chain `84532` selected; no Worker deployed |
+| Dependency audit | Overrides plus `npm audit` and `npm audit --omit=dev` recheck on 2026-05-27 | Frontend full audit and contract production audit are clear; contract development/deployment tooling currently reports 35 findings (`18` low, `4` moderate, `13` high), pending assessment before any mainnet action |
 
 ## Phase 1: Revoke And Rotate Exposed Credentials
 
-- [x] Confirm the old Base Sepolia contract remains unfunded. Verified through a
-      public Base Sepolia RPC balance read on 2026-05-26: `0 wei`.
-- [x] Revoke the exposed Sepolia deployer/owner/oracle credential and never use
-      it for any fresh deployment. Operationally contained on 2026-05-26 by
-      removing local copies and deleting the legacy Worker's oracle binding;
-      the legacy EOA remains authority only on the unfunded obsolete contract.
+- [x] Confirm the old Base Sepolia contract remains unfunded. Verified through
+      public Base Sepolia RPC balance reads on 2026-05-26 and 2026-05-27:
+      `0 wei`.
+- [ ] Retire the exposed Sepolia deployer/owner/oracle credential and never
+      use it for any further action. It was operationally contained on
+      2026-05-26 by removing local copies and deleting the legacy Worker's
+      oracle binding, but it was later used externally on 2026-05-27 to
+      forward test funds to the fresh deployer; treat it as compromised and
+      unusable going forward.
 - [ ] Rotate Auth.js/NextAuth secrets previously stored in tracked environment
       files.
 - [ ] Rotate or replace GitHub OAuth client credentials that were stored in
@@ -88,7 +95,7 @@ Evidence to record without secrets:
 | --- | --- | --- | --- | --- |
 | Legacy unsafe contract balance | Testnet | 2026-05-26 | Public RPC read | `0 wei`; keep unfunded |
 | Privileged wallet credentials | Testnet | 2026-05-26 | Codex execution | Fresh roles generated; compromised local copies removed; legacy Worker oracle binding deleted |
-| Misrouted faucet funds at legacy EOA | Testnet | 2026-05-27 | Public RPC read | Approximately `0.02498 ETH` at exposed EOA `0xf4b2aB8Db0e7A1F84aCEE48D3C2e76C4a42C700A`; do not sign with or reuse this address |
+| Misrouted faucet funds at legacy EOA | Testnet | 2026-05-27 | Public RPC read | Approximately `0.02498 ETH` observed at exposed EOA `0xf4b2aB8Db0e7A1F84aCEE48D3C2e76C4a42C700A`, then forwarded externally to the fresh deployer; do not reuse this address |
 | Auth secret | Testnet |  |  |  |
 | GitHub OAuth credentials | Testnet |  |  |  |
 | Worker runtime secrets | Testnet | 2026-05-26 | Codex execution | Legacy `basecred` binding list is empty; fresh isolated Worker secrets pending deployment |
@@ -138,8 +145,8 @@ The deployment environment must be supplied outside Git according to
 `contracts/.env.example`. Do not copy actual credential values into this
 document.
 
-- [ ] Deploy a fresh Base Sepolia contract using fresh test-only roles.
-- [ ] Confirm the old Sepolia contract remains unfunded and is not referenced
+- [x] Deploy a fresh Base Sepolia contract using fresh test-only roles.
+- [x] Confirm the old Sepolia contract remains unfunded and is not referenced
       by the new frontend.
 - [ ] Verify the fresh Sepolia contract source on BaseScan.
 - [ ] Deploy a fresh Base mainnet contract only with the approved multisig
@@ -155,13 +162,13 @@ Deployment record:
 | Field | Testnet | Mainnet |
 | --- | --- | --- |
 | Chain ID | `84532` | `8453` |
-| Contract address |  |  |
-| Deployment transaction hash |  |  |
-| Owner address |  |  |
-| Oracle address |  |  |
-| Exposure cap |  |  |
-| Verification URL |  |  |
-| Initial balance after deploy |  | `0 ETH` until approval |
+| Contract address | `0x4b26eB9487DFB97e967Bb45262AABfF73c816C72` |  |
+| Deployment transaction hash | `0x7c9d37b9e77bdb3296781e9e0b771f52ed6d7c2b168ffcd98aa17d1811d27967` |  |
+| Owner address | `0xeAA84647AAa3Af893f2666216cf5e6371d0c34AD` |  |
+| Oracle address | `0x39a33072BB6dA521Fe6994F891AdDB0e4e4Ebc16` |  |
+| Exposure cap | `0.01 ETH` |  |
+| Verification URL | [Sourcify full match](https://repo.sourcify.dev/contracts/full_match/84532/0x4b26eB9487DFB97e967Bb45262AABfF73c816C72/) (BaseScan pending API token) |  |
+| Initial balance after deploy | `0 ETH` | `0 ETH` until approval |
 
 ## Phase 4: Configure OAuth, Cloudflare And Frontend Deployments
 
@@ -193,7 +200,7 @@ Public deployment record:
 | OAuth callback URL | `https://basecred-testnet.nachdakwale.workers.dev/api/auth/callback/github` | `https://basecred-mainnet.nachdakwale.workers.dev/api/auth/callback/github` |
 | Worker environment name | `testnet` | `mainnet` |
 | Chain ID shown by UI | `84532` | `8453` |
-| Contract shown/configured |  |  |
+| Contract shown/configured | `0x4b26eB9487DFB97e967Bb45262AABfF73c816C72` (build validation only) |  |
 | Explorer base URL | `https://sepolia.basescan.org` | `https://basescan.org` |
 
 Read-only Cloudflare observation on 2026-05-26:
@@ -276,20 +283,18 @@ Approval record:
 - Fresh testnet roles and a separate unfunded mainnet oracle are recorded.
   Approved mainnet multisig ownership, production RPC provider selection,
   mainnet exposure cap, and alert destinations remain pending.
-- The fresh testnet deployer has no gas. On 2026-05-27, approximately
-  `0.02498 ETH` was found at the exposed legacy EOA instead; transferring it
-  would reuse a compromised privileged signer and is not permitted. A
-  testnet drip directly to the recorded fresh deployer is required before
-  fresh Sepolia deployment and on-chain security-flow checks.
-- No fresh contract or isolated Worker deployment can proceed until those
-  inputs exist and secrets are entered directly through provider interfaces.
+- A fresh Sepolia contract is deployed and Sourcify full-match verified.
+  BaseScan source publication still requires a `BASESCAN_API_KEY` entered
+  outside Git, and the testnet Worker cannot be deployed until fresh OAuth and
+  Worker secrets are entered through provider interfaces.
 - Security-flow execution, monitoring setup, and the Sepolia incident drill
-  require the fresh testnet deployment and operational accounts.
+  require the isolated testnet Worker, fresh OAuth application, and operational
+  test identities.
 - Frontend dependency audit findings were remediated to zero. Contract runtime
-  has no production dependency findings; its deployment tooling retains 32
-  low/moderate audit findings after high/critical findings were eliminated.
-  Any residual deployment-tooling acceptance must be recorded before mainnet
-  deployment or funding.
+  has no production dependency findings; its development/deployment tooling
+  currently reports 35 findings, including 13 high-severity findings after the
+  2026-05-27 advisory recheck. These findings must be assessed and addressed
+  or explicitly accepted before mainnet deployment or funding.
 - Mainnet deployment, funding, and go-live remain unauthorized; no liquidity
   transaction has been performed.
 

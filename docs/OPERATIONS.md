@@ -99,7 +99,10 @@ Supply `BASE_MAINNET_RPC_URL` from production-grade operated infrastructure or
 a provider selected by the owner. Verify each fresh deployment on BaseScan and
 record the deployed contract address, constructor parameters, transaction hash,
 chain ID, owner, oracle, exposure cap, and verification URL in the release
-record.
+record. Supply `BASESCAN_API_KEY` only through an untracked process
+environment or secret manager when running the verification commands. The
+Hardhat configuration also submits source to Sourcify so a public full-match
+verification record can be obtained without storing an explorer API token.
 
 ## Frontend Environments
 
