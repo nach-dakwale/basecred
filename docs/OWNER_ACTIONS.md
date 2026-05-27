@@ -60,7 +60,7 @@ approval remain unchecked below.
 | Cloudflare legacy containment | Wrangler secret deletion and local ignored-file removal | Passed: legacy `basecred` secret binding list is empty; legacy ignored environment copies were removed without reading their values |
 | Cloudflare separation | Read-only Wrangler environment inspection | In progress: intended `basecred-testnet` and `basecred-mainnet` Workers do not yet exist |
 | Fresh signer creation | Independent private keys generated in memory and stored only in macOS Keychain | Passed for testnet deployer/owner/oracle and mainnet oracle; public addresses recorded below |
-| Fresh testnet deployer funding | Public Base Sepolia and Ethereum Sepolia RPC balance reads; Base-listed faucet attempts using the public deployer address only | Blocked: `0 ETH` on both chains; available faucet routes required human verification/account action or prohibited mainnet-balance dependency |
+| Fresh testnet deployer funding | Public Base Sepolia and Ethereum Sepolia RPC balance reads; Base-listed faucet attempts using the public deployer address only; Base Sepolia recheck on 2026-05-27 | Blocked: fresh deployer remains at `0 ETH`; the compromised legacy EOA received approximately `0.02498 ETH` and will not be used for a transfer or fresh deployment |
 | Dependency audit | Overrides plus `npm audit` and `npm audit --omit=dev` | Improved: frontend full audit is clear; contract production audit is clear; contract tooling retains 32 low/moderate findings and no high/critical findings |
 
 ## Phase 1: Revoke And Rotate Exposed Credentials
@@ -88,6 +88,7 @@ Evidence to record without secrets:
 | --- | --- | --- | --- | --- |
 | Legacy unsafe contract balance | Testnet | 2026-05-26 | Public RPC read | `0 wei`; keep unfunded |
 | Privileged wallet credentials | Testnet | 2026-05-26 | Codex execution | Fresh roles generated; compromised local copies removed; legacy Worker oracle binding deleted |
+| Misrouted faucet funds at legacy EOA | Testnet | 2026-05-27 | Public RPC read | Approximately `0.02498 ETH` at exposed EOA `0xf4b2aB8Db0e7A1F84aCEE48D3C2e76C4a42C700A`; do not sign with or reuse this address |
 | Auth secret | Testnet |  |  |  |
 | GitHub OAuth credentials | Testnet |  |  |  |
 | Worker runtime secrets | Testnet | 2026-05-26 | Codex execution | Legacy `basecred` binding list is empty; fresh isolated Worker secrets pending deployment |
@@ -275,10 +276,11 @@ Approval record:
 - Fresh testnet roles and a separate unfunded mainnet oracle are recorded.
   Approved mainnet multisig ownership, production RPC provider selection,
   mainnet exposure cap, and alert destinations remain pending.
-- The fresh testnet deployer has no gas. Tested faucet paths were unavailable,
-  required mainnet holdings, required account login, or presented a human
-  CAPTCHA. A testnet drip to the recorded deployer is required before fresh
-  Sepolia deployment and on-chain security-flow checks.
+- The fresh testnet deployer has no gas. On 2026-05-27, approximately
+  `0.02498 ETH` was found at the exposed legacy EOA instead; transferring it
+  would reuse a compromised privileged signer and is not permitted. A
+  testnet drip directly to the recorded fresh deployer is required before
+  fresh Sepolia deployment and on-chain security-flow checks.
 - No fresh contract or isolated Worker deployment can proceed until those
   inputs exist and secrets are entered directly through provider interfaces.
 - Security-flow execution, monitoring setup, and the Sepolia incident drill
