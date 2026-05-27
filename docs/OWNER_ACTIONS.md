@@ -64,8 +64,10 @@ below.
 | Fresh testnet deployer funding | Public Base Sepolia RPC balance reads on 2026-05-27 | Passed for testnet deployment gas: fresh deployer received approximately `0.02498 ETH`; funding was forwarded externally from the exposed legacy EOA and does not remediate its compromise |
 | Fresh Sepolia deployment | Public Base Sepolia transaction receipt and contract state reads on 2026-05-27 | Passed: fresh contract deployed with intended test-only roles and `0.01 ETH` cap; initial contract balance is `0 ETH` |
 | Public source verification | Hardhat verification submission to Sourcify on 2026-05-27 | Partially passed: Sourcify exact full-match verified; BaseScan publication remains pending a `BASESCAN_API_KEY` entered outside Git |
-| Testnet frontend build selection | Lint, typecheck, unit tests, OpenNext `build:testnet`, and Wrangler testnet dry run on 2026-05-27 | Passed for build/config validation: fresh testnet contract and chain `84532` selected; no Worker deployed |
+| Testnet frontend build selection | Lint, typecheck, unit tests, OpenNext `build:testnet`, and Wrangler testnet dry run on 2026-05-27 | Passed for build/config validation: fresh testnet contract and chain `84532` selected before subsequent Worker deployment |
 | Direct Sepolia contract controls | Fresh Keychain-held owner/oracle roles and a recoverable test-only borrower; public transaction receipts and state reads on 2026-05-27 | Passed for on-chain subset: proof-nonce replay rejection, active-loan second-wallet rejection, collateral reserve/repayment, withdrawal protection, pause and oracle revoke/restore; OAuth/API-specific checks pending |
+| Environment OAuth registrations | GitHub Developer Settings on 2026-05-27 | Passed for public registration: distinct `BaseCred Testnet` and `BaseCred Mainnet` applications created with their separate Worker callback URLs; client secrets pending GitHub confirmation/runtime insertion |
+| Testnet Worker deployment | Cloudflare Wrangler deployment and public page read on 2026-05-27 | Partially passed: isolated `basecred-testnet` Worker deployed and visible banner reads `Base Sepolia Testnet`; runtime secrets and authenticated flow pending |
 | Dependency audit | Updated `tmp` override plus `npm audit` and `npm audit --omit=dev` recheck on 2026-05-27 | Frontend full audit and contract production audit are clear; contract development/deployment tooling reports 32 residual findings (`26` low, `6` moderate) with no high/critical findings |
 
 ## Phase 1: Revoke And Rotate Exposed Credentials
@@ -177,8 +179,8 @@ Deployment record:
 Set up separate GitHub OAuth applications and separate Cloudflare Worker
 deployments/domains.
 
-- [ ] Configure the testnet OAuth callback URL for the selected testnet domain.
-- [ ] Configure the mainnet OAuth callback URL for the selected production
+- [x] Configure the testnet OAuth callback URL for the selected testnet domain.
+- [x] Configure the mainnet OAuth callback URL for the selected production
       domain in a separate OAuth application.
 - [ ] Replace placeholder public values in the environment-specific frontend
       deployment configuration with each fresh contract address and domain.
@@ -188,7 +190,8 @@ deployments/domains.
 - [ ] Set the following Cloudflare secrets independently for `testnet` and
       `mainnet`: `AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`,
       `GITHUB_API_TOKEN`, `ORACLE_PRIVATE_KEY`, and `RPC_URL`.
-- [ ] Build and deploy the testnet frontend artifact.
+- [x] Build and deploy the testnet frontend artifact. Public deployment is
+      present; authenticated use remains blocked until fresh secrets are set.
 - [ ] Build and deploy the distinct mainnet frontend artifact.
 - [ ] Confirm the visible network banner is correct on each deployed site.
 - [ ] Confirm each environment points only to its own chain and fresh
@@ -198,19 +201,19 @@ Public deployment record:
 
 | Field | Testnet | Mainnet |
 | --- | --- | --- |
-| Frontend URL |  |  |
+| Frontend URL | `https://basecred-testnet.nachdakwale.workers.dev` | Not deployed |
 | OAuth callback URL | `https://basecred-testnet.nachdakwale.workers.dev/api/auth/callback/github` | `https://basecred-mainnet.nachdakwale.workers.dev/api/auth/callback/github` |
 | Worker environment name | `testnet` | `mainnet` |
 | Chain ID shown by UI | `84532` | `8453` |
-| Contract shown/configured | `0x4b26eB9487DFB97e967Bb45262AABfF73c816C72` (build validation only) |  |
+| Contract shown/configured | `0x4b26eB9487DFB97e967Bb45262AABfF73c816C72` |  |
 | Explorer base URL | `https://sepolia.basescan.org` | `https://basescan.org` |
 
-Read-only Cloudflare observation on 2026-05-26:
+Cloudflare environment record:
 
 | Worker | Deployment state | Secret-value handling |
 | --- | --- | --- |
 | `basecred` | Existing legacy Worker deployment | Exposed binding names deleted on 2026-05-26; legacy authenticated/oracle functionality disabled |
-| `basecred-testnet` | Does not exist | Create only after fresh testnet configuration and secrets are ready |
+| `basecred-testnet` | Deployed on 2026-05-27 at `https://basecred-testnet.nachdakwale.workers.dev` | Public settings select Base Sepolia/fresh contract; fresh runtime secrets pending |
 | `basecred-mainnet` | Does not exist | Create only after approved mainnet configuration and secrets are ready |
 
 ## Phase 5: Validate Security Flows On Testnet
@@ -301,16 +304,17 @@ Approval record:
 ## Current Blockers
 
 - The legacy Worker secret bindings and local compromised environment copies
-  have been removed. GitHub requires interactive sudo authentication to revoke
-  the old OAuth application and create independent testnet/mainnet OAuth
-  applications; fresh Auth/OAuth/optional API token secrets remain pending.
+  have been removed. Distinct GitHub OAuth applications now exist, but GitHub
+  requires interactive confirmation to generate their new client secrets;
+  fresh Auth/OAuth/optional API token runtime secrets remain pending.
 - Fresh testnet roles and a separate unfunded mainnet oracle are recorded.
   Approved mainnet multisig ownership, production RPC provider selection,
   mainnet exposure cap, and alert destinations remain pending.
 - A fresh Sepolia contract is deployed and Sourcify full-match verified.
   BaseScan source publication still requires a `BASESCAN_API_KEY` entered
-  outside Git, and the testnet Worker cannot be deployed until fresh OAuth and
-  Worker secrets are entered through provider interfaces.
+  outside Git. The isolated testnet Worker is deployed but cannot be used for
+  authenticated/oracle operations until fresh OAuth and Worker secrets are
+  entered through provider interfaces.
 - Direct on-chain Sepolia controls have passed for binding/replay protection,
   active-loan wallet rejection, repayment/reserves, withdrawal protection, and
   pause/oracle restoration. OAuth-bound signature expiration, API audit and
