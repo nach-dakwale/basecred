@@ -171,14 +171,14 @@ Deployment record:
 | Field | Testnet | Mainnet |
 | --- | --- | --- |
 | Chain ID | `84532` | `8453` |
-| Contract address | `0x4b26eB9487DFB97e967Bb45262AABfF73c816C72` |  |
-| Deployment transaction hash | `0x7c9d37b9e77bdb3296781e9e0b771f52ed6d7c2b168ffcd98aa17d1811d27967` |  |
-| Owner address | `0xeAA84647AAa3Af893f2666216cf5e6371d0c34AD` |  |
-| Oracle address | `0x39a33072BB6dA521Fe6994F891AdDB0e4e4Ebc16` |  |
-| Exposure cap | `0.01 ETH` |  |
-| Verification URL | [Sourcify full match](https://repo.sourcify.dev/contracts/full_match/84532/0x4b26eB9487DFB97e967Bb45262AABfF73c816C72/) (BaseScan pending API token) |  |
+| Contract address | `0xb156eD24D6d1C2006742E979446B37E38524E2d3` |  |
+| Deployment transaction hash | `0x5b8913d17714521bcefcb0ddeff642523c1b8efa5357419fea7d35c40a1ff6d1` |  |
+| Owner address | `0xB618108F14ad4A5611Fba72677bBc1f4D84C0ab1` |  |
+| Oracle address | `0xAE10cC5F84c52DD69B21Bfc8837ffd8C1Daad6c1` |  |
+| Exposure cap | `0.5 ETH` |  |
+| Verification URL | pending |  |
 | Initial balance after deploy | `0 ETH` | `0 ETH` until approval |
-| Current test liquidity after direct checks | `0.0031 ETH` | Not funded |
+| Current test liquidity after direct checks | `0.003 ETH` | Not funded |
 
 ## Phase 4: Configure OAuth, Cloudflare And Frontend Deployments
 
@@ -211,7 +211,7 @@ Public deployment record:
 | OAuth callback URL | `https://basecred-testnet.nachdakwale.workers.dev/api/auth/callback/github` | `https://basecred-mainnet.nachdakwale.workers.dev/api/auth/callback/github` |
 | Worker environment name | `testnet` | `mainnet` |
 | Chain ID shown by UI | `84532` | `8453` |
-| Contract shown/configured | `0x4b26eB9487DFB97e967Bb45262AABfF73c816C72` |  |
+| Contract shown/configured | `0xb156eD24D6d1C2006742E979446B37E38524E2d3` |  |
 | Explorer base URL | `https://sepolia.basescan.org` | `https://basescan.org` |
 
 Cloudflare environment record:

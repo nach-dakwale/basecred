@@ -10,7 +10,7 @@ name = "basecred-testnet"
 [env.testnet.vars]
 NEXTAUTH_URL = "https://basecred-testnet.nachdakwale.workers.dev"
 NEXT_PUBLIC_CHAIN_ID = "84532"
-NEXT_PUBLIC_CONTRACT_ADDRESS = "0x4b26eB9487DFB97e967Bb45262AABfF73c816C72"
+NEXT_PUBLIC_CONTRACT_ADDRESS = "0xb156eD24D6d1C2006742E979446B37E38524E2d3"
 NEXT_PUBLIC_EXPLORER_URL = "https://sepolia.basescan.org"
 NEXT_PUBLIC_NETWORK_NAME = "Base Sepolia Testnet"
 NEXT_PUBLIC_RPC_URL = "https://sepolia.base.org"
