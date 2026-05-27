@@ -15,6 +15,8 @@ NEXT_PUBLIC_EXPLORER_URL = "https://sepolia.basescan.org"
 NEXT_PUBLIC_NETWORK_NAME = "Base Sepolia Testnet"
 NEXT_PUBLIC_RPC_URL = "https://sepolia.base.org"
 
+# ADMIN_PASSWORD = ""  # Do NOT set here. Use: wrangler secret put ADMIN_PASSWORD --env testnet
+
 [[env.testnet.ratelimits]]
 name = "API_RATE_LIMITER"
 namespace_id = "1001"
@@ -30,6 +32,8 @@ NEXT_PUBLIC_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"
 NEXT_PUBLIC_EXPLORER_URL = "https://basescan.org"
 NEXT_PUBLIC_NETWORK_NAME = "Base Mainnet"
 NEXT_PUBLIC_RPC_URL = "https://browser-rpc-provider.example.invalid"
+
+# ADMIN_PASSWORD = ""  # Do NOT set here. Use: wrangler secret put ADMIN_PASSWORD --env mainnet
 
 [[env.mainnet.ratelimits]]
 name = "API_RATE_LIMITER"
