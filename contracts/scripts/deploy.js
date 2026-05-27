@@ -37,8 +37,11 @@ async function main() {
   const Pool = await ethers.getContractFactory("GitHubLoanPool");
   const pool = await Pool.deploy(oracle, owner, maximumPrincipal);
   await pool.waitForDeployment();
+  const deploymentTransaction = pool.deploymentTransaction();
+  if (!deploymentTransaction) throw new Error("Deployment transaction is unavailable");
   const address = await pool.getAddress();
   console.log(`GitHubLoanPool deployed to: ${address}`);
+  console.log(`Deployment transaction: ${deploymentTransaction.hash}`);
   console.log("Record this address in the matching frontend build environment and deployment record.");
 }
 
