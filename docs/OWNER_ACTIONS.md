@@ -65,6 +65,7 @@ below.
 | Fresh Sepolia deployment | Public Base Sepolia transaction receipt and contract state reads on 2026-05-27 | Passed: fresh contract deployed with intended test-only roles and `0.01 ETH` cap; initial contract balance is `0 ETH` |
 | Public source verification | Hardhat verification submission to Sourcify on 2026-05-27 | Partially passed: Sourcify exact full-match verified; BaseScan publication remains pending a `BASESCAN_API_KEY` entered outside Git |
 | Testnet frontend build selection | Lint, typecheck, unit tests, OpenNext `build:testnet`, and Wrangler testnet dry run on 2026-05-27 | Passed for build/config validation: fresh testnet contract and chain `84532` selected; no Worker deployed |
+| Direct Sepolia contract controls | Fresh Keychain-held owner/oracle roles and a recoverable test-only borrower; public transaction receipts and state reads on 2026-05-27 | Passed for on-chain subset: proof-nonce replay rejection, active-loan second-wallet rejection, collateral reserve/repayment, withdrawal protection, pause and oracle revoke/restore; OAuth/API-specific checks pending |
 | Dependency audit | Overrides plus `npm audit` and `npm audit --omit=dev` recheck on 2026-05-27 | Frontend full audit and contract production audit are clear; contract development/deployment tooling currently reports 35 findings (`18` low, `4` moderate, `13` high), pending assessment before any mainnet action |
 
 ## Phase 1: Revoke And Rotate Exposed Credentials
@@ -169,6 +170,7 @@ Deployment record:
 | Exposure cap | `0.01 ETH` |  |
 | Verification URL | [Sourcify full match](https://repo.sourcify.dev/contracts/full_match/84532/0x4b26eB9487DFB97e967Bb45262AABfF73c816C72/) (BaseScan pending API token) |  |
 | Initial balance after deploy | `0 ETH` | `0 ETH` until approval |
+| Current test liquidity after direct checks | `0.0031 ETH` | Not funded |
 
 ## Phase 4: Configure OAuth, Cloudflare And Frontend Deployments
 
@@ -217,17 +219,33 @@ Before considering mainnet liquidity:
 
 - [ ] Use a test GitHub identity and wallet to sign a binding challenge and
       confirm a score submission succeeds on the fresh Sepolia contract.
-- [ ] Confirm the same identity cannot obtain simultaneous credit through a
-      second wallet.
-- [ ] Confirm challenge replay or an expired signature fails.
-- [ ] Originate and repay a collateralized test loan; confirm reserved
+- [x] Confirm the same identity cannot obtain simultaneous credit through a
+      second wallet. Verified on-chain with a synthetic test identity during
+      an active loan; OAuth identity workflow remains pending.
+- [ ] Confirm challenge replay or an expired signature fails. The on-chain
+      proof-nonce replay rejection passed; signed challenge expiration requires
+      the isolated Worker/OAuth flow.
+- [x] Originate and repay a collateralized test loan; confirm reserved
       collateral returns correctly.
 - [ ] Validate default handling on a test identity; confirm refresh/reborrow is
       blocked after liquidation.
-- [ ] Exercise owner withdrawal protection while collateral is reserved.
-- [ ] Exercise `pause()`, oracle revocation/rotation, and unpause procedures.
+- [x] Exercise owner withdrawal protection while collateral is reserved.
+- [x] Exercise `pause()`, oracle revocation/rotation, and unpause procedures.
 - [ ] Confirm API audit events and rate-limit behavior are visible in
       Cloudflare logging/monitoring.
+
+Direct on-chain Sepolia evidence:
+
+| Validation | Public evidence | Result |
+| --- | --- | --- |
+| Test liquidity deposit | `0xa6f1f0cd7dc481264c9f939998670c7abc76b68917dd3f346ba421bd982dead5` | Deposited `0.003 ETH` for live test controls |
+| Initial synthetic binding and proof replay | `0xa92cbb727c74efee35211f602b8d028adb051849c6176b25b19ca05974f0eaac` plus public `usedProofNonces`/revert read | Passed; no loan originated for this initial synthetic identity |
+| Loan identity binding | `0x1b6858e788fe58ebf972924d3325dd0264dc6d239c22ebbdb4d3c4f180a2b646` | Bound test-only borrower `0xf2abcDb98017CcE2170Cbe079b542E16109DFD1B` |
+| Replay and second-wallet rejection | Read-only reverted simulations after binding/origination | Passed for proof nonce replay and active-loan wallet migration rejection |
+| Loan and collateral reserve | `0xe597457bd5f9ec4b5cc38aeffcc24c30a711172fe0752b1c8077b1ded5a0afec` plus reverted over-withdraw simulation | Passed; `0.001 ETH` test loan with reserved collateral protected from owner withdrawal |
+| Repayment and reserve release | `0x7be961856966583c2f55cf57baa3fd37b112504bdb75fa91cf8aa6251a0157c6` | Passed; final outstanding principal and reserved collateral are `0 ETH` |
+| Pause and oracle revocation | `0x5877de9f572dc7e03b5243e57915b60f0a21eaf912b72d6617fd5fb0165abff3`, `0x8eb4bdb9bdc05959ea4a0a92c279fcbf39abdcf0a005cd15509c17d4ebcbeb12` | Passed; revoked oracle write rejected |
+| Oracle restoration and unpause | `0x0bb491ea3102404a398a620f718a247e9bd7eb5b0ed921b2801bf421084406f3`, `0xde73c2c12df328189028ee0315c64ea3cb11a89dcf33c42085f62768208a4c02` | Passed; final oracle restored and final paused state is `false` |
 
 ## Phase 6: Monitoring And Incident Readiness
 
@@ -287,9 +305,12 @@ Approval record:
   BaseScan source publication still requires a `BASESCAN_API_KEY` entered
   outside Git, and the testnet Worker cannot be deployed until fresh OAuth and
   Worker secrets are entered through provider interfaces.
-- Security-flow execution, monitoring setup, and the Sepolia incident drill
-  require the isolated testnet Worker, fresh OAuth application, and operational
-  test identities.
+- Direct on-chain Sepolia controls have passed for binding/replay protection,
+  active-loan wallet rejection, repayment/reserves, withdrawal protection, and
+  pause/oracle restoration. OAuth-bound signature expiration, API audit and
+  rate-limit validation, default timing, monitoring setup, and the full
+  incident workflow still require the isolated testnet Worker and operational
+  accounts.
 - Frontend dependency audit findings were remediated to zero. Contract runtime
   has no production dependency findings; its development/deployment tooling
   currently reports 35 findings, including 13 high-severity findings after the
