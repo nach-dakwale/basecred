@@ -66,7 +66,7 @@ below.
 | Public source verification | Hardhat verification submission to Sourcify on 2026-05-27 | Partially passed: Sourcify exact full-match verified; BaseScan publication remains pending a `BASESCAN_API_KEY` entered outside Git |
 | Testnet frontend build selection | Lint, typecheck, unit tests, OpenNext `build:testnet`, and Wrangler testnet dry run on 2026-05-27 | Passed for build/config validation: fresh testnet contract and chain `84532` selected; no Worker deployed |
 | Direct Sepolia contract controls | Fresh Keychain-held owner/oracle roles and a recoverable test-only borrower; public transaction receipts and state reads on 2026-05-27 | Passed for on-chain subset: proof-nonce replay rejection, active-loan second-wallet rejection, collateral reserve/repayment, withdrawal protection, pause and oracle revoke/restore; OAuth/API-specific checks pending |
-| Dependency audit | Overrides plus `npm audit` and `npm audit --omit=dev` recheck on 2026-05-27 | Frontend full audit and contract production audit are clear; contract development/deployment tooling currently reports 35 findings (`18` low, `4` moderate, `13` high), pending assessment before any mainnet action |
+| Dependency audit | Updated `tmp` override plus `npm audit` and `npm audit --omit=dev` recheck on 2026-05-27 | Frontend full audit and contract production audit are clear; contract development/deployment tooling reports 32 residual findings (`26` low, `6` moderate) with no high/critical findings |
 
 ## Phase 1: Revoke And Rotate Exposed Credentials
 
@@ -281,6 +281,12 @@ This phase requires an explicit owner decision after all earlier phases pass.
 - [ ] Monitor the initial launch under the capped exposure policy and pause on
       unexpected behavior.
 
+Dependency assessment record:
+
+| Date | Assessment | Disposition |
+| --- | --- | --- |
+| 2026-05-27 | The patched `tmp` override removed newly surfaced high-severity toolchain findings; `npm audit --omit=dev` is clear and full contract audit retains `26` low plus `6` moderate deployment/test-tooling findings. A disposable `npm audit fix --force` evaluation requires a Hardhat 3 ESM/plugin/API migration and is not a safe automatic lockfile update. | No production funding approval. Residual toolchain risk must be migrated or explicitly accepted before mainnet deployment/funding. |
+
 Approval record:
 
 | Decision | Value |
@@ -312,10 +318,11 @@ Approval record:
   incident workflow still require the isolated testnet Worker and operational
   accounts.
 - Frontend dependency audit findings were remediated to zero. Contract runtime
-  has no production dependency findings; its development/deployment tooling
-  currently reports 35 findings, including 13 high-severity findings after the
-  2026-05-27 advisory recheck. These findings must be assessed and addressed
-  or explicitly accepted before mainnet deployment or funding.
+  has no production dependency findings; after updating the patched `tmp`
+  override, its development/deployment tooling retains 32 low/moderate
+  findings and no high/critical findings. Residual toolchain risk remains
+  unaccepted and must be resolved or explicitly accepted before mainnet
+  deployment or funding.
 - Mainnet deployment, funding, and go-live remain unauthorized; no liquidity
   transaction has been performed.
 
