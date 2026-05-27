@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
 
     const oracleKey = process.env.ORACLE_PRIVATE_KEY;
     if (!oracleKey || !isHex(oracleKey) || oracleKey.length !== 66) {
+      auditEvent("oracle.not_configured", { identityId });
       return NextResponse.json({ error: "Oracle not configured" }, { status: 503 });
     }
     const cached = scoreCache.get(githubSession.githubId);
