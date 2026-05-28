@@ -36,7 +36,7 @@ export default function Home() {
           </Link>
         </section>
 
-        <section className="grid grid-cols-3 gap-4">
+        <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             {
               title: "Score based on web3 contributions",
