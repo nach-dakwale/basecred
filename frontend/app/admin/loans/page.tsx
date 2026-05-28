@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { formatEther } from "viem";
 import {
   getAdminClient, CONTRACT, ADMIN_ABI,
-  EVENT_LOAN_REQUESTED, EVENT_LOAN_REPAID, EVENT_LOAN_LIQUIDATED,
+  CONTRACT_DEPLOY_BLOCK, fetchLoanEvents,
 } from "@/lib/admin-chain";
 import { PUBLIC_NETWORK } from "@/lib/network";
 
@@ -38,19 +38,16 @@ function shortAddr(addr: string) {
 
 async function fetchLoans(): Promise<LoanRow[]> {
   const client = getAdminClient();
-  const [requested, repaid, liquidated] = await Promise.all([
-    client.getLogs({ address: CONTRACT, event: EVENT_LOAN_REQUESTED, fromBlock: 0n }),
-    client.getLogs({ address: CONTRACT, event: EVENT_LOAN_REPAID, fromBlock: 0n }),
-    client.getLogs({ address: CONTRACT, event: EVENT_LOAN_LIQUIDATED, fromBlock: 0n }),
-  ]);
+  const loanEvents = await fetchLoanEvents(CONTRACT_DEPLOY_BLOCK);
+  const { requested, repaid, liquidated } = loanEvents;
 
-  const repaidIds = new Set(repaid.map((e) => e.args.identityId));
-  const liquidatedIds = new Set(liquidated.map((e) => e.args.identityId));
+  const repaidIds = new Set(repaid.map((e) => e.identityId));
+  const liquidatedIds = new Set(liquidated.map((e) => e.identityId));
 
   const rows = await Promise.all(
     requested.map(async (e) => {
-      const identityId = e.args.identityId as `0x${string}`;
-      const wallet = e.args.wallet as `0x${string}`;
+      const identityId = e.identityId;
+      const wallet = e.wallet;
       const loan = await client.readContract({
         address: CONTRACT, abi: ADMIN_ABI, functionName: "loans",
         args: [identityId],
@@ -63,8 +60,8 @@ async function fetchLoans(): Promise<LoanRow[]> {
       const [amount, collateral, dueBlock] = loan;
 
       let status: LoanStatus = "active";
-      if (liquidatedIds.has(identityId)) status = "liquidated";
-      else if (repaidIds.has(identityId)) status = "repaid";
+      if (liquidatedIds.has(identityId as `0x${string}`)) status = "liquidated";
+      else if (repaidIds.has(identityId as `0x${string}`)) status = "repaid";
       else if (isDefaulted) status = "defaulted";
 
       return {
