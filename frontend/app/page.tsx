@@ -21,12 +21,11 @@ export default function Home() {
           <h1 className="text-5xl font-bold leading-tight tracking-tight text-white">
             Borrow ETH with your
             <br />
-            GitHub reputation
+            GitHub history
           </h1>
           <p className="text-lg text-zinc-400 max-w-xl leading-relaxed">
-            BaseCred scores your open-source contribution history and issues
-            undercollateralized loans on Base. No credit bureau. No identity verification.
-            Just code.
+            BaseCred calculates a score from public GitHub activity and uses it
+            to set loan terms on Base.
           </p>
           <Link
             href="/dapp"
@@ -39,16 +38,16 @@ export default function Home() {
         <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             {
-              title: "Score based on web3 contributions",
-              body: "PRs merged to Ethereum, Base, Uniswap, Aave, and other major crypto repos carry the most weight.",
+              title: "Score from web3 contributions",
+              body: "Merged PRs to Ethereum, Base, Uniswap, Aave, and other major crypto repos carry the most weight.",
             },
             {
-              title: "Borrow up to 0.75 ETH uncollateralized",
-              body: "Top-tier contributors get fully uncollateralized loans. No crypto to put up front.",
+              title: "Borrow up to 0.75 ETH",
+              body: "Higher tiers can borrow more. Some tiers require collateral; Tier 4 does not.",
             },
             {
-              title: "On-chain credit history",
-              body: "Your score lives on Base. Repay on time to keep it. Default and it resets.",
+              title: "On-chain repayment record",
+              body: "Repay on time to stay eligible for future loans. A default blocks new borrowing.",
             },
           ].map((card) => (
             <div key={card.title} className="rounded-lg border border-zinc-800 bg-zinc-900 p-4 space-y-2">

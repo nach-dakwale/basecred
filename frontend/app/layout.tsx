@@ -6,11 +6,11 @@ const BASE_URL = "https://basecred-testnet.nachdakwale.workers.dev";
 
 export const metadata: Metadata = {
   title: "BaseCred - Developer Credit on Base",
-  description: "Undercollateralized ETH loans backed by your GitHub reputation",
+  description: "ETH loan terms based on public GitHub history",
   metadataBase: new URL(BASE_URL),
   openGraph: {
     title: "BaseCred - Developer Credit on Base",
-    description: "Undercollateralized ETH loans on Base, credit-scored by GitHub reputation.",
+    description: "ETH loan terms on Base, based on public GitHub history.",
     url: BASE_URL,
     siteName: "BaseCred",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "BaseCred - Developer Credit on Base",
-    description: "Undercollateralized ETH loans on Base, credit-scored by GitHub reputation.",
+    description: "ETH loan terms on Base, based on public GitHub history.",
     images: ["/og.png"],
   },
 };
