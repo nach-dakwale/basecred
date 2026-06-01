@@ -41,14 +41,14 @@ export default function SalePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0D1A] text-slate-100">
-      <header className="border-b border-slate-800/60 px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3]">
+      <header className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between">
         <span className="font-semibold text-sm tracking-tight text-white">BaseCred</span>
         <nav className="flex items-center gap-4 text-sm">
-          <Link href="/" className="text-slate-400 hover:text-white">Home</Link>
-          <Link href="/dapp" className="text-slate-400 hover:text-white">App</Link>
-          <Link href="/dividends" className="text-slate-400 hover:text-white">Dividends</Link>
-          <Link href="/govern" className="text-slate-400 hover:text-white">Govern</Link>
+          <Link href="/" className="text-[#8B949E] hover:text-white">Home</Link>
+          <Link href="/dapp" className="text-[#8B949E] hover:text-white">App</Link>
+          <Link href="/dividends" className="text-[#8B949E] hover:text-white">Dividends</Link>
+          <Link href="/govern" className="text-[#8B949E] hover:text-white">Govern</Link>
           <Link href="/sale" className="text-white">Token Sale</Link>
         </nav>
       </header>
@@ -56,7 +56,7 @@ export default function SalePage() {
       <main className="mx-auto max-w-lg px-6 py-16 space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-white">baseCREDIT Private Sale</h1>
-          <p className="mt-2 text-slate-400">
+          <p className="mt-2 text-[#8B949E]">
             baseCREDIT earns 80% of borrower interest as ETH dividends and grants governance rights over protocol parameters.
           </p>
         </div>
@@ -70,15 +70,15 @@ export default function SalePage() {
         {!isNotConfigured && (
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-slate-400">Raised</span>
+              <span className="text-[#8B949E]">Raised</span>
               <span className="text-white font-mono">
                 {totalRaised !== undefined ? formatEther(totalRaised) : "—"} / {hardCap !== undefined ? formatEther(hardCap) : "—"} ETH
               </span>
             </div>
-            <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
-              <div className="h-full rounded-full transition-all" style={{ width: `${progressPct}%`, background: "linear-gradient(90deg, #7c3aed, #22d3ee)" }} />
+            <div className="h-2 rounded-full bg-[#21262D] overflow-hidden">
+              <div className="h-full rounded-full transition-all" style={{ width: `${progressPct}%`, background: "linear-gradient(90deg, #196C2E, #3FB950)" }} />
             </div>
-            <div className="flex justify-between text-xs text-slate-500">
+            <div className="flex justify-between text-xs text-[#6E7681]">
               <span>{progressPct}% filled</span>
               {price !== undefined && <span>{formatEther(price)} ETH per baseCREDIT</span>}
             </div>
@@ -86,7 +86,7 @@ export default function SalePage() {
         )}
 
         {!saleActive && !isNotConfigured && (
-          <div className="rounded-lg border border-slate-700/60 bg-slate-900/40 p-4 text-slate-400 text-sm text-center">
+          <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-4 text-[#8B949E] text-sm text-center">
             {startTime && now < startTime ? "Sale has not started yet." : "Sale has ended."}
           </div>
         )}
@@ -94,7 +94,7 @@ export default function SalePage() {
         {saleActive && (
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm text-slate-400">ETH to spend</label>
+              <label className="text-sm text-[#8B949E]">ETH to spend</label>
               <div className="relative">
                 <input
                   type="number"
@@ -103,15 +103,15 @@ export default function SalePage() {
                   value={ethInput}
                   onChange={(e) => setEthInput(e.target.value)}
                   placeholder="0.0"
-                  className="w-full rounded-md border border-slate-700/60 bg-slate-900/40 px-3 py-2.5 pr-16 text-sm text-white font-mono focus:outline-none focus:border-violet-500"
+                  className="w-full rounded-md border border-[#30363D] bg-[#161B22] px-3 py-2.5 pr-16 text-sm text-white font-mono focus:outline-none focus:border-[#238636]"
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">ETH</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#6E7681]">ETH</span>
               </div>
             </div>
 
             {preview !== undefined && weiIn > 0n && (
-              <div className="rounded-md border border-slate-800/60 bg-slate-900/40/50 p-3 flex justify-between text-sm">
-                <span className="text-slate-400">You receive</span>
+              <div className="rounded-md border border-[#30363D] bg-[#161B22]/50 p-3 flex justify-between text-sm">
+                <span className="text-[#8B949E]">You receive</span>
                 <span className="text-white font-mono">
                   {Number(formatEther(preview)).toLocaleString(undefined, { maximumFractionDigits: 2 })} baseCREDIT
                 </span>
@@ -128,7 +128,7 @@ export default function SalePage() {
               <button
                 onClick={handleBuy}
                 disabled={!weiIn || weiIn === 0n || isPending || confirming}
-                className="w-full rounded-md bg-violet-600 px-4 py-3 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="w-full rounded-md bg-[#238636] px-4 py-3 text-sm font-medium text-white hover:bg-[#2EA043] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 {isPending || confirming ? "Buying..." : "Buy baseCREDIT"}
               </button>
@@ -136,7 +136,7 @@ export default function SalePage() {
           </div>
         )}
 
-        <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-5 space-y-3 text-sm text-slate-400">
+        <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-5 space-y-3 text-sm text-[#8B949E]">
           <p className="font-medium text-white">What you get</p>
           <ul className="space-y-1.5 list-disc list-inside">
             <li>80% of all borrower interest paid as ETH — claimable any time</li>

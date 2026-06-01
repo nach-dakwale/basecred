@@ -75,22 +75,22 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
       ? activeLoan.dueBlock - currentBlock
       : 0n;
     return (
-      <div className="rounded-xl border border-slate-800/60 bg-slate-900/40 p-5 space-y-4 text-slate-100">
+      <div className="rounded-md border border-[#30363D] bg-[#161B22] p-5 space-y-4 text-[#E6EDF3]">
         <h2 className="text-sm font-semibold text-white">Active Loan</h2>
         <div className="grid grid-cols-2 gap-2 text-sm">
-          <div className="rounded-md bg-slate-800/50 border border-slate-700/40 p-3">
-            <p className="text-xs text-slate-500">Borrowed</p>
+          <div className="rounded-md bg-[#161B22] border border-[#30363D] p-3">
+            <p className="text-xs text-[#6E7681]">Borrowed</p>
             <p className="font-medium text-white mt-0.5">{formatEther(activeLoan.amount)} ETH</p>
           </div>
-          <div className="rounded-md bg-slate-800/50 border border-slate-700/40 p-3">
-            <p className="text-xs text-slate-500">Interest owed (10%)</p>
+          <div className="rounded-md bg-[#161B22] border border-[#30363D] p-3">
+            <p className="text-xs text-[#6E7681]">Interest owed (10%)</p>
             <p className="font-medium text-white mt-0.5">{formatEther(interestWei)} ETH</p>
           </div>
-          <div className="rounded-md bg-slate-800/50 border border-slate-700/40 p-3 col-span-2">
-            <p className="text-xs text-slate-500">Total repayment due</p>
+          <div className="rounded-md bg-[#161B22] border border-[#30363D] p-3 col-span-2">
+            <p className="text-xs text-[#6E7681]">Total repayment due</p>
             <p className="font-semibold text-white mt-0.5">{formatEther(repayWei)} ETH</p>
-            <p className="text-xs text-slate-500 mt-2">Maturity</p>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-[#6E7681] mt-2">Maturity</p>
+            <p className="text-xs text-[#8B949E] mt-0.5">
               {currentBlock !== undefined
                 ? `${remainingBlocks.toString()} blocks remaining`
                 : `Block ${activeLoan.dueBlock.toString()}`}
@@ -109,7 +109,7 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
             })
           }
           disabled={isPending}
-          className="w-full rounded-md bg-violet-600 py-2.5 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50 transition-colors"
+          className="w-full rounded-md bg-[#238636] py-2.5 text-sm font-medium text-white hover:bg-[#2EA043] disabled:opacity-50 transition-colors"
         >
           {isPending ? "Submitting..." : `Repay ${formatEther(repayWei)} ETH`}
         </button>
@@ -124,20 +124,20 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
     : null;
 
   return (
-    <div className="rounded-xl border border-slate-800/60 bg-slate-900/40 p-5 space-y-4 text-slate-100">
+    <div className="rounded-md border border-[#30363D] bg-[#161B22] p-5 space-y-4 text-[#E6EDF3]">
       <h2 className="text-sm font-semibold text-white">Request a Loan</h2>
       {isDefaulted ? (
         <p className="text-sm text-red-400">
           This credit identity has a defaulted loan and is permanently blocked from new borrowing.
         </p>
       ) : maxEth === 0 ? (
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-[#6E7681]">
           Your score is too low to borrow. Contribute to web3 open source projects to raise it.
         </p>
       ) : (
         <>
           <div className="space-y-1.5">
-            <label className="text-xs text-slate-500">Amount (max {maxEth} ETH)</label>
+            <label className="text-xs text-[#6E7681]">Amount (max {maxEth} ETH)</label>
             <div className="flex gap-2">
               <input
                 type="number"
@@ -147,13 +147,13 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0.0"
-                className="flex-1 rounded-md border border-slate-700/60 bg-slate-800 px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-violet-600 focus:border-violet-600"
+                className="flex-1 rounded-md border border-[#30363D] bg-[#21262D] px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-[#238636] focus:border-violet-600"
               />
-              <span className="flex items-center text-sm text-slate-500 pr-1">ETH</span>
+              <span className="flex items-center text-sm text-[#6E7681] pr-1">ETH</span>
             </div>
           </div>
           {colNeeded && (
-            <div className="rounded-md border border-slate-700/60 bg-slate-800/60 p-3 text-xs text-slate-400">
+            <div className="rounded-md border border-[#30363D] bg-[#21262D]/60 p-3 text-xs text-[#8B949E]">
               {breakdown?.collateralPct === 0
                 ? "No collateral required for your tier."
                 : `${colNeeded} ETH will be locked as collateral (${breakdown?.collateralPct}%).`}
@@ -174,11 +174,11 @@ export function LoanPanel({ address, breakdown, onTxHash }: Props) {
               });
             }}
             disabled={isPending || !amount || amountNum <= 0 || amountNum > maxEth}
-            className="w-full rounded-md bg-violet-600 py-2.5 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50 transition-colors"
+            className="w-full rounded-md bg-[#238636] py-2.5 text-sm font-medium text-white hover:bg-[#2EA043] disabled:opacity-50 transition-colors"
           >
             {isPending ? "Submitting..." : "Request Loan"}
           </button>
-          <p className="text-xs text-slate-600">
+          <p className="text-xs text-[#6E7681]">
             10% flat interest. 30-day repayment window. A liquidated default permanently blocks new borrowing.
           </p>
         </>

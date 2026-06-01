@@ -45,22 +45,22 @@ export default function DividendsPage() {
   const isNotConfigured = !BASE_CREDIT_TOKEN_ADDRESS || !CRED_DIVIDENDS_ADDRESS;
 
   return (
-    <div className="min-h-screen bg-[#0B0D1A] text-slate-100">
-      <header className="border-b border-slate-800/60 px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3]">
+      <header className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between">
         <span className="font-semibold text-sm tracking-tight text-white">BaseCred</span>
         <nav className="flex items-center gap-4 text-sm">
-          <Link href="/" className="text-slate-400 hover:text-white">Home</Link>
-          <Link href="/dapp" className="text-slate-400 hover:text-white">App</Link>
+          <Link href="/" className="text-[#8B949E] hover:text-white">Home</Link>
+          <Link href="/dapp" className="text-[#8B949E] hover:text-white">App</Link>
           <Link href="/dividends" className="text-white">Dividends</Link>
-          <Link href="/govern" className="text-slate-400 hover:text-white">Govern</Link>
-          <Link href="/sale" className="text-slate-400 hover:text-white">Token Sale</Link>
+          <Link href="/govern" className="text-[#8B949E] hover:text-white">Govern</Link>
+          <Link href="/sale" className="text-[#8B949E] hover:text-white">Token Sale</Link>
         </nav>
       </header>
 
       <main className="mx-auto max-w-2xl px-6 py-16 space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-white">Dividends</h1>
-          <p className="mt-2 text-slate-400">80% of borrower interest is distributed to baseCREDIT holders.</p>
+          <p className="mt-2 text-[#8B949E]">80% of borrower interest is distributed to baseCREDIT holders.</p>
         </div>
 
         {isNotConfigured && (
@@ -70,20 +70,20 @@ export default function DividendsPage() {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-5 space-y-1">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Your baseCREDIT</p>
+          <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-5 space-y-1">
+            <p className="text-xs text-[#6E7681] uppercase tracking-wider">Your baseCREDIT</p>
             <p className="text-2xl font-mono font-semibold text-white">
               {balance !== undefined ? Number(formatEther(balance)).toLocaleString(undefined, { maximumFractionDigits: 0 }) : "—"}
             </p>
           </div>
-          <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-5 space-y-1">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Claimable ETH</p>
+          <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-5 space-y-1">
+            <p className="text-xs text-[#6E7681] uppercase tracking-wider">Claimable ETH</p>
             <p className="text-2xl font-mono font-semibold text-white">
               {pending !== undefined ? Number(formatEther(pending)).toFixed(6) : "—"}
             </p>
           </div>
-          <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-5 space-y-1 sm:col-span-2">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Total interest distributed (all time)</p>
+          <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-5 space-y-1 sm:col-span-2">
+            <p className="text-xs text-[#6E7681] uppercase tracking-wider">Total interest distributed (all time)</p>
             <p className="text-2xl font-mono font-semibold text-white">
               {totalDistributed !== undefined ? `${Number(formatEther(totalDistributed)).toFixed(4)} ETH` : "—"}
             </p>
@@ -96,13 +96,13 @@ export default function DividendsPage() {
           <button
             onClick={handleClaim}
             disabled={!pending || pending === 0n || claimPending || claimConfirming || isNotConfigured}
-            className="w-full rounded-md bg-violet-600 px-4 py-3 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="w-full rounded-md bg-[#238636] px-4 py-3 text-sm font-medium text-white hover:bg-[#2EA043] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             {claimPending || claimConfirming ? "Claiming..." : claimSuccess ? "Claimed!" : "Claim ETH"}
           </button>
         )}
 
-        <p className="text-xs text-slate-600">
+        <p className="text-xs text-[#6E7681]">
           Dividends accumulate automatically as borrowers repay loans. Claim any time — no lockup.
           Holding baseCREDIT without self-delegating still earns dividends.
         </p>

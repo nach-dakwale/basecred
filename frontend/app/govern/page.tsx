@@ -10,13 +10,13 @@ import { formatEther } from "viem";
 const PROPOSAL_STATES = ["Pending", "Active", "Canceled", "Defeated", "Succeeded", "Queued", "Expired", "Executed"] as const;
 const STATE_COLORS: Record<string, string> = {
   Active: "text-green-400 bg-green-950 border-green-800",
-  Succeeded: "text-violet-400 bg-violet-950 border-violet-800",
+  Succeeded: "text-[#3FB950] bg-violet-950 border-[#2EA043]",
   Queued: "text-yellow-400 bg-yellow-950 border-yellow-800",
-  Executed: "text-slate-400 bg-slate-900/40 border-slate-700/60",
+  Executed: "text-[#8B949E] bg-[#161B22] border-[#30363D]",
   Defeated: "text-red-400 bg-red-950 border-red-800",
-  Pending: "text-slate-400 bg-slate-900/40 border-slate-700/60",
-  Canceled: "text-slate-500 bg-slate-900/40 border-slate-800/60",
-  Expired: "text-slate-500 bg-slate-900/40 border-slate-800/60",
+  Pending: "text-[#8B949E] bg-[#161B22] border-[#30363D]",
+  Canceled: "text-[#6E7681] bg-[#161B22] border-[#30363D]",
+  Expired: "text-[#6E7681] bg-[#161B22] border-[#30363D]",
 };
 
 export default function GovernPage() {
@@ -50,15 +50,15 @@ export default function GovernPage() {
   const canPropose = votes !== undefined && threshold !== undefined && votes >= threshold;
 
   return (
-    <div className="min-h-screen bg-[#0B0D1A] text-slate-100">
-      <header className="border-b border-slate-800/60 px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3]">
+      <header className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between">
         <span className="font-semibold text-sm tracking-tight text-white">BaseCred</span>
         <nav className="flex items-center gap-4 text-sm">
-          <Link href="/" className="text-slate-400 hover:text-white">Home</Link>
-          <Link href="/dapp" className="text-slate-400 hover:text-white">App</Link>
-          <Link href="/dividends" className="text-slate-400 hover:text-white">Dividends</Link>
+          <Link href="/" className="text-[#8B949E] hover:text-white">Home</Link>
+          <Link href="/dapp" className="text-[#8B949E] hover:text-white">App</Link>
+          <Link href="/dividends" className="text-[#8B949E] hover:text-white">Dividends</Link>
           <Link href="/govern" className="text-white">Govern</Link>
-          <Link href="/sale" className="text-slate-400 hover:text-white">Token Sale</Link>
+          <Link href="/sale" className="text-[#8B949E] hover:text-white">Token Sale</Link>
         </nav>
       </header>
 
@@ -66,10 +66,10 @@ export default function GovernPage() {
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-3xl font-bold text-white">Governance</h1>
-            <p className="mt-2 text-slate-400">baseCREDIT holders vote on protocol parameters.</p>
+            <p className="mt-2 text-[#8B949E]">baseCREDIT holders vote on protocol parameters.</p>
           </div>
           {canPropose && (
-            <Link href="/govern/new" className="rounded-md bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-500 transition-colors">
+            <Link href="/govern/new" className="rounded-md bg-[#238636] px-4 py-2 text-sm font-medium text-white hover:bg-[#2EA043] transition-colors">
               New Proposal
             </Link>
           )}
@@ -82,22 +82,22 @@ export default function GovernPage() {
         )}
 
         {address && notDelegated && (
-          <div className="rounded-lg border border-slate-700/60 bg-slate-900/40 p-4 flex items-center justify-between">
-            <p className="text-sm text-slate-300">Activate your voting power by delegating your tokens.</p>
-            <Link href="/govern/delegate" className="text-sm text-violet-400 hover:text-violet-300">Delegate</Link>
+          <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-4 flex items-center justify-between">
+            <p className="text-sm text-[#E6EDF3]">Activate your voting power by delegating your tokens.</p>
+            <Link href="/govern/delegate" className="text-sm text-[#3FB950] hover:text-[#3FB950]">Delegate</Link>
           </div>
         )}
 
         {address && (
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-4 space-y-1">
-              <p className="text-xs text-slate-500 uppercase tracking-wider">Your voting power</p>
+            <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-4 space-y-1">
+              <p className="text-xs text-[#6E7681] uppercase tracking-wider">Your voting power</p>
               <p className="text-xl font-mono font-semibold text-white">
                 {votes !== undefined ? Number(formatEther(votes)).toLocaleString(undefined, { maximumFractionDigits: 0 }) : "—"}
               </p>
             </div>
-            <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-4 space-y-1">
-              <p className="text-xs text-slate-500 uppercase tracking-wider">Proposal threshold</p>
+            <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-4 space-y-1">
+              <p className="text-xs text-[#6E7681] uppercase tracking-wider">Proposal threshold</p>
               <p className="text-xl font-mono font-semibold text-white">
                 {threshold !== undefined ? Number(formatEther(threshold)).toLocaleString(undefined, { maximumFractionDigits: 0 }) : "—"}
               </p>
@@ -105,10 +105,10 @@ export default function GovernPage() {
           </div>
         )}
 
-        <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-8 text-center text-slate-500 text-sm">
+        <div className="rounded-lg border border-[#30363D] bg-[#161B22] p-8 text-center text-[#6E7681] text-sm">
           Proposal indexing requires a subgraph or event scanner. Connect one to display live proposals.
           <br />
-          <span className="text-xs text-slate-600 mt-2 block">Use The Graph or a custom indexer on Base Sepolia.</span>
+          <span className="text-xs text-[#6E7681] mt-2 block">Use The Graph or a custom indexer on Base Sepolia.</span>
         </div>
       </main>
     </div>
