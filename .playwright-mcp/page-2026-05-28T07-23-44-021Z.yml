@@ -1,0 +1,17 @@
+- generic [active] [ref=e1]:
+  - generic:
+    - img "Coinbase logo"
+  - generic [ref=e4]:
+    - main [ref=e6]:
+      - generic [ref=e9]:
+        - status [ref=e11]
+        - status [ref=e15]
+    - region "Cookie notice" [ref=e17]:
+      - generic [ref=e19]:
+        - paragraph [ref=e20]:
+          - text: We use strictly necessary cookies to enable essential functions, such as security and authentication. For more information, see our
+          - link "Cookie Policy" [ref=e21] [cursor=pointer]:
+            - /url: https://coinbase.com/legal/cookie
+          - text: .
+        - button "Dismiss" [ref=e22] [cursor=pointer]:
+          - generic [ref=e24]: Dismiss

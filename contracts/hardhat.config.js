@@ -5,7 +5,10 @@ const accounts = process.env.DEPLOYER_PRIVATE_KEY ? [process.env.DEPLOYER_PRIVAT
 
 /** @type {import('hardhat/config').HardhatUserConfig} */
 module.exports = {
-  solidity: "0.8.24",
+  solidity: {
+    version: "0.8.28",
+    settings: { evmVersion: "cancun", optimizer: { enabled: true, runs: 200 } },
+  },
   etherscan: {
     apiKey: {
       baseSepolia: process.env.BASESCAN_API_KEY || "",

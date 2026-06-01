@@ -1,0 +1,41 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - link "🚀 Triangle is joining Bridge! →" [ref=e3] [cursor=pointer]:
+      - /url: https://twitter.com/triangleplatfrm/status/1852321193275076698
+      - generic [ref=e4]: 🚀
+      - text: Triangle is joining Bridge! →
+    - iframe [ref=e6]:
+      - link "Follow @triangleplatfrm" [ref=f43e4] [cursor=pointer]:
+        - /url: https://x.com/intent/follow?original_referer=https%3A%2F%2Ffaucet.triangleplatform.com%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Efollow%7Ctwgr%5Etriangleplatfrm&region=follow_link&screen_name=triangleplatfrm
+        - generic [ref=f43e6]: Follow @triangleplatfrm
+    - banner [ref=e7]:
+      - link "Faucet logo Faucet" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - img "Faucet logo" [ref=e10]
+        - generic [ref=e11]: Faucet
+      - generic [ref=e12]: The multi-chain faucet for everyone.
+    - main [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - img [ref=e16]
+          - generic [ref=e17]:
+            - generic [ref=e18]: Base
+            - generic [ref=e19]: Base Sepolia
+        - generic "0.000451453570407781 ETH" [ref=e21]: 0.000451 ETH
+      - generic [ref=e22]:
+        - textbox "0x0000000000000000000000000000000000000000" [active] [ref=e23]
+        - button "Request 0.001 ETH" [disabled] [ref=e24]
+      - generic [ref=e25]:
+        - generic [ref=e26]: "Got extra ETH on Base Sepolia? Please donate to:"
+        - img [ref=e27]
+        - link "0x007aB5199B6c57F7aA51bc3D0604a43505501a0C" [ref=e30] [cursor=pointer]:
+          - /url: https://sepolia.basescan.org/address/0x007aB5199B6c57F7aA51bc3D0604a43505501a0C
+    - contentinfo [ref=e31]:
+      - link "Powered by Triangle" [ref=e32] [cursor=pointer]:
+        - /url: https://www.triangleplatform.com
+        - img "Powered by Triangle" [ref=e33]
+  - iframe [ref=e36]:
+    - generic [ref=f42e6]:
+      - text: protected by
+      - strong [ref=f42e7]: reCAPTCHA
+  - alert [ref=e37]

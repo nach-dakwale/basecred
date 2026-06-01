@@ -5,12 +5,14 @@ export default function Home() {
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <header className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
         <span className="font-semibold text-sm tracking-tight text-white">BaseCred</span>
-        <Link
-          href="/dapp"
-          className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-500 transition-colors"
-        >
-          Launch App
-        </Link>
+        <nav className="flex items-center gap-4">
+          <Link href="/dividends" className="text-sm text-zinc-400 hover:text-white">Dividends</Link>
+          <Link href="/govern" className="text-sm text-zinc-400 hover:text-white">Govern</Link>
+          <Link href="/sale" className="text-sm text-zinc-400 hover:text-white">Token Sale</Link>
+          <Link href="/dapp" className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-500 transition-colors">
+            Launch App
+          </Link>
+        </nav>
       </header>
 
       <main className="mx-auto max-w-3xl px-6 py-24 space-y-16">

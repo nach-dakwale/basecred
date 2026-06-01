@@ -1,0 +1,19 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - link "BaseCred" [ref=e4] [cursor=pointer]:
+        - /url: /
+    - main [ref=e5]:
+      - generic [ref=e6]: "Active network: Base Sepolia Testnet - test funds only"
+      - generic [ref=e7]:
+        - heading "Developer Credit" [level=1] [ref=e8]
+        - paragraph [ref=e9]: Borrow ETH on Base against your GitHub contribution history.
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - paragraph [ref=e13]: 1. Connect GitHub
+          - paragraph [ref=e14]: We read your public contribution history to calculate your credit score.
+        - button "Connect GitHub" [ref=e15]
+      - generic [ref=e18]:
+        - paragraph [ref=e19]: 2. Connect Wallet
+        - paragraph [ref=e20]: MetaMask or Coinbase Wallet on Base Sepolia Testnet.
+  - alert [ref=e21]

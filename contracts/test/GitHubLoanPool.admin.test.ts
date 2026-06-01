@@ -7,7 +7,7 @@ describe("GitHubLoanPool loss controls", function () {
   async function fixture(score = 250) {
     const [deployer, owner, oracle, wallet, other, successor] = await ethers.getSigners();
     const Pool = await ethers.getContractFactory("GitHubLoanPool", deployer);
-    const pool = await Pool.deploy(oracle.address, owner.address, ethers.parseEther("1"));
+    const pool = await Pool.deploy(oracle.address, owner.address, ethers.parseEther("1"), deployer.address);
     await pool.waitForDeployment();
     await deployer.sendTransaction({ to: await pool.getAddress(), value: ethers.parseEther("2") });
     await pool.connect(oracle).setScoreAndBind(ID, wallet.address, score, ethers.id("proof"));

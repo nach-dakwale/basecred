@@ -8,7 +8,7 @@ describe("GitHubLoanPool identity credit", function () {
   async function deploy() {
     const [deployer, owner, oracle, wallet, nextWallet, liquidator] = await ethers.getSigners();
     const Pool = await ethers.getContractFactory("GitHubLoanPool", deployer);
-    const pool = await Pool.deploy(oracle.address, owner.address, ethers.parseEther("2"));
+    const pool = await Pool.deploy(oracle.address, owner.address, ethers.parseEther("2"), deployer.address);
     await pool.waitForDeployment();
     await deployer.sendTransaction({ to: await pool.getAddress(), value: ethers.parseEther("5") });
     return { pool, owner, oracle, wallet, nextWallet, liquidator };

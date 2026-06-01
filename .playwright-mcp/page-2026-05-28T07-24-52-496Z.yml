@@ -1,0 +1,251 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - navigation [ref=e4]:
+      - generic [ref=e5]:
+        - link "Apply now" [ref=e6] [cursor=pointer]:
+          - /url: /solana-20m-fund
+        - generic [ref=e8]: We just launched a $20M fund just for Solana builders. Up to $25k in credits per team. Apply now
+      - generic [ref=e10]:
+        - link "Home" [ref=e13] [cursor=pointer]:
+          - /url: /
+          - img "Alchemy logo" [ref=e14]
+        - button "Toggle mobile navigation menu" [ref=e16] [cursor=pointer]
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - img "faucets background" [ref=e24]
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - heading "Base Sepolia Faucet" [level=1] [ref=e28]
+            - paragraph [ref=e29]: Get free testnet tokens for the Base Sepolia network to test your smart contracts, apps, and blockchain integrations.
+          - generic [ref=e30]:
+            - generic [ref=e32]:
+              - generic [ref=e33]: Select network
+              - button "Base Sepolia logo Base Sepolia" [ref=e35] [cursor=pointer]:
+                - img "Base Sepolia logo" [ref=e36]
+                - generic [ref=e37]: Base Sepolia
+                - img [ref=e38]
+            - generic [ref=e40]:
+              - generic [ref=e41]: Wallet Address
+              - textbox "Add wallet address" [ref=e44]
+              - paragraph [ref=e45]:
+                - text: You can request
+                - strong [ref=e46]: 0.1 ETH
+                - text: each day
+            - button "Send 0.1 ETH" [disabled]:
+              - generic: Send 0.1 ETH
+      - generic [ref=e51]:
+        - generic [ref=e53]:
+          - heading "FAQs" [level=3] [ref=e54]
+          - heading "Understanding faucets" [level=2] [ref=e55]
+        - list [ref=e56]:
+          - listitem [ref=e57]:
+            - button "What is a testnet faucet?" [expanded] [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]:
+                - generic [ref=e60]: What is a testnet faucet?
+                - img [ref=e62]
+            - generic [ref=e65]: A testnet faucet provides developers with free test tokens for deploying, testing, and optimizing smart contracts on test blockchain networks such as Sepolia and Amoy. Smart contracts on public (mainnet) blockchains like Ethereum and Polygon require gas fees to run, and testnets mirror that production environment but replace the real tokens with test tokens, minimizing development costs associated and exploit risks. Testnet faucets give developers access to those test tokens. Most faucets require social authentication (e.g. a post on X or a login confirming you are a real human) or place you in a queue to wait for a testnet token through the faucet. However, the Alchemy faucet is free, fast, and does not require authentication.
+          - listitem [ref=e66]:
+            - button "How to use an Alchemy faucet?" [ref=e67] [cursor=pointer]:
+              - generic [ref=e68]:
+                - generic [ref=e69]: How to use an Alchemy faucet?
+                - img [ref=e71]
+            - generic [ref=e73]: To request funds from one of Alchemy's faucets, simply enter your wallet address for that network and hit the send button. To prevent faucet abuse, we've set some eligibility requirements that wallets must meet in order to receive faucet tokens. You can request testnet tokens every 24 hours without authentication.
+          - listitem [ref=e74]:
+            - button "What are testnet tokens?" [ref=e75] [cursor=pointer]:
+              - generic [ref=e76]:
+                - generic [ref=e77]: What are testnet tokens?
+                - img [ref=e79]
+            - generic [ref=e81]: Testnet tokens are a test currency that allows you to test your application before going live in production on mainnet. Testnet tokens can be used in place of mainnet tokens on testnet networks.
+          - listitem [ref=e82]:
+            - button "The faucet confirmed it sent tokens. Why haven't I received them yet?" [ref=e83] [cursor=pointer]:
+              - generic [ref=e84]:
+                - generic [ref=e85]: The faucet confirmed it sent tokens. Why haven't I received them yet?
+                - img [ref=e87]
+            - generic [ref=e89]: The time it takes for you to receive your test tokens may vary. This could be because the network may be congested at that time, or the amount of gas we have set for these transactions may be a little low compared to other transactions that miners may choose to validate instead. Keep an eye on your wallet. Your faucet transaction will land soon enough.
+          - listitem [ref=e90]:
+            - button "Why is there a daily limit?" [ref=e91] [cursor=pointer]:
+              - generic [ref=e92]:
+                - generic [ref=e93]: Why is there a daily limit?
+                - img [ref=e95]
+            - generic [ref=e97]: To prevent abuse and ensure a reliable faucet experience for all users, we apply a daily limit per address. This limit resets every 24 hours.
+          - listitem [ref=e98]:
+            - button "What are the claim eligibility criteria?" [ref=e99] [cursor=pointer]:
+              - generic [ref=e100]:
+                - generic [ref=e101]: What are the claim eligibility criteria?
+                - img [ref=e103]
+            - generic [ref=e105]: To keep the faucet fair and accessible, your wallet must meet a few requirements before you can successfully claim testnet tokens. You need at least 0.001 ETH on Ethereum Mainnet for EVM-based testnets, or an equivalent minimum balance on the corresponding chain mainnet for non-EVM networks. You need sufficient activity on Ethereum Mainnet for EVM-based testnets, or on the corresponding chain mainnet for non-EVM networks, to qualify. This means your wallet must have performed enough real transactions on the relevant mainnet. You need to have a low enough existing testnet balance since wallets with a significant amount of testnet tokens are not eligible for additional claims.
+      - generic [ref=e106]:
+        - img "Desktop section background image" [ref=e108]
+        - generic [ref=e111]:
+          - heading "Build blockchain magic" [level=2] [ref=e113]
+          - link "Get your API key" [ref=e115] [cursor=pointer]:
+            - /url: https://dashboard.alchemy.com/signup?a=faucets%252Fbase-sepolia
+    - generic [ref=e116]:
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - img "Alchemy logo"
+            - paragraph [ref=e121]: The web3 development platform
+            - generic [ref=e122]:
+              - link "Twitter" [ref=e123] [cursor=pointer]:
+                - /url: https://x.com/Alchemy
+                - img "X Logo" [ref=e124]
+              - link "LinkedIn" [ref=e125] [cursor=pointer]:
+                - /url: https://linkedin.com/company/alchemyinc/
+                - img "LinkedIn Logo" [ref=e126]
+              - link "YouTube" [ref=e127] [cursor=pointer]:
+                - /url: https://www.youtube.com/c/alchemyplatform
+                - img "YouTube Logo" [ref=e128]
+              - link "Discord" [ref=e129] [cursor=pointer]:
+                - /url: https://discord.gg/9GnAcXQYZ6
+                - img "Discord Logo" [ref=e130]
+          - generic [ref=e131]:
+            - heading "Supercharge your inbox" [level=2] [ref=e132]
+            - paragraph [ref=e133]: Sign up for our developer newsletter.
+            - link "Subscribe" [ref=e134] [cursor=pointer]:
+              - /url: /newsletter
+              - generic [ref=e136]: Subscribe
+        - generic [ref=e137]:
+          - generic [ref=e138]:
+            - heading "Products" [level=2] [ref=e139]
+            - list [ref=e140]:
+              - listitem [ref=e141]:
+                - link "Cortex" [ref=e142] [cursor=pointer]:
+                  - /url: /cortex
+              - listitem [ref=e143]:
+                - link "RPC API" [ref=e144] [cursor=pointer]:
+                  - /url: /rpc-api
+              - listitem [ref=e145]:
+                - link "Rollups" [ref=e146] [cursor=pointer]:
+                  - /url: /rollups
+              - listitem [ref=e147]:
+                - link "NFT API" [ref=e148] [cursor=pointer]:
+                  - /url: /nft-api
+              - listitem [ref=e149]:
+                - link "Webhooks" [ref=e150] [cursor=pointer]:
+                  - /url: /webhooks
+              - listitem [ref=e151]:
+                - link "Websockets" [ref=e152] [cursor=pointer]:
+                  - /url: /smart-websockets
+              - listitem [ref=e153]:
+                - link "Transfers API" [ref=e154] [cursor=pointer]:
+                  - /url: /transfers-api
+              - listitem [ref=e155]:
+                - link "Token API" [ref=e156] [cursor=pointer]:
+                  - /url: /token-api
+              - listitem [ref=e157]:
+                - link "Bundler API" [ref=e158] [cursor=pointer]:
+                  - /url: /bundler
+              - listitem [ref=e159]:
+                - link "Gas Manager API" [ref=e160] [cursor=pointer]:
+                  - /url: /gasless-transactions
+          - generic [ref=e161]:
+            - heading "Developers" [level=2] [ref=e162]
+            - list [ref=e163]:
+              - listitem [ref=e164]:
+                - link "Sign up" [ref=e165] [cursor=pointer]:
+                  - /url: https://dashboard.alchemy.com/signup?a=faucets%252Fbase-sepolia
+              - listitem [ref=e166]:
+                - link "Status" [ref=e167] [cursor=pointer]:
+                  - /url: https://status.alchemy.com/
+              - listitem [ref=e168]:
+                - link "Docs" [ref=e169] [cursor=pointer]:
+                  - /url: https://www.alchemy.com/docs
+              - listitem [ref=e170]:
+                - link "Support" [ref=e171] [cursor=pointer]:
+                  - /url: /support
+              - listitem [ref=e172]:
+                - link "Faucets" [ref=e173] [cursor=pointer]:
+                  - /url: /faucets
+              - listitem [ref=e174]:
+                - link "Gwei calculator" [ref=e175] [cursor=pointer]:
+                  - /url: /gwei-calculator
+              - listitem [ref=e176]:
+                - link "Chain directory" [ref=e177] [cursor=pointer]:
+                  - /url: /rpc
+              - listitem [ref=e178]:
+                - link "Request a chain" [ref=e179] [cursor=pointer]:
+                  - /url: /chain-request
+              - listitem [ref=e180]:
+                - link "Snapshots" [ref=e181] [cursor=pointer]:
+                  - /url: /snapshots
+          - generic [ref=e182]:
+            - heading "Community" [level=2] [ref=e183]
+            - list [ref=e184]:
+              - listitem [ref=e185]:
+                - link "Alchemy University" [ref=e186] [cursor=pointer]:
+                  - /url: https://www.alchemy.com/university
+              - listitem [ref=e187]:
+                - link "Blog" [ref=e188] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e189]:
+                - link "Customer stories" [ref=e190] [cursor=pointer]:
+                  - /url: /case-studies
+              - listitem [ref=e191]:
+                - link "Overviews" [ref=e192] [cursor=pointer]:
+                  - /url: /overviews
+              - listitem [ref=e193]:
+                - link "App store" [ref=e194] [cursor=pointer]:
+                  - /url: https://www.alchemy.com/dapps
+              - listitem [ref=e195]:
+                - link "Events" [ref=e196] [cursor=pointer]:
+                  - /url: /events
+              - listitem [ref=e197]:
+                - link "Newsletter" [ref=e198] [cursor=pointer]:
+                  - /url: /newsletter
+              - listitem [ref=e199]:
+                - link "Startup program" [ref=e200] [cursor=pointer]:
+                  - /url: /startup-program
+              - listitem [ref=e201]:
+                - link "Offchain bug bounties" [ref=e202] [cursor=pointer]:
+                  - /url: https://cantina.xyz/bounties/d1496b11-e0cb-4905-80e6-b95f892f39ba
+              - listitem [ref=e203]:
+                - link "Onchain bug bounties" [ref=e204] [cursor=pointer]:
+                  - /url: https://cantina.xyz/bounties/246de4d3-e138-4340-bdfc-fc4c95951491
+          - generic [ref=e205]:
+            - heading "Company" [level=2] [ref=e206]
+            - list [ref=e207]:
+              - listitem [ref=e208]:
+                - link "About us" [ref=e209] [cursor=pointer]:
+                  - /url: /company
+              - listitem [ref=e210]:
+                - link "Careers" [ref=e211] [cursor=pointer]:
+                  - /url: /careers
+              - listitem [ref=e212]:
+                - link "Customers" [ref=e213] [cursor=pointer]:
+                  - /url: /case-studies
+              - listitem [ref=e214]:
+                - link "Newsroom" [ref=e215] [cursor=pointer]:
+                  - /url: /newsroom
+              - listitem [ref=e216]:
+                - link "Press kit" [ref=e217] [cursor=pointer]:
+                  - /url: /brand
+              - listitem [ref=e218]:
+                - link "Security" [ref=e219] [cursor=pointer]:
+                  - /url: /security
+              - listitem [ref=e220]:
+                - link "Legal" [ref=e221] [cursor=pointer]:
+                  - /url: https://legal.alchemy.com/
+          - generic [ref=e222]:
+            - heading "Contact" [level=2] [ref=e223]
+            - list [ref=e224]:
+              - listitem [ref=e225]:
+                - link "Sales" [ref=e226] [cursor=pointer]:
+                  - /url: /contact-sales
+              - listitem [ref=e227]:
+                - link "Press" [ref=e228] [cursor=pointer]:
+                  - /url: mailto:media@alchemy.com
+              - listitem [ref=e229]:
+                - link "Email" [ref=e230] [cursor=pointer]:
+                  - /url: mailto:support@alchemy.com
+              - listitem [ref=e231]:
+                - link "Discord" [ref=e232] [cursor=pointer]:
+                  - /url: https://discord.gg/9GnAcXQYZ6
+      - paragraph [ref=e234]:
+        - text: 2026 Alchemy Insights, Inc. ·
+        - link "Legal" [ref=e235] [cursor=pointer]:
+          - /url: https://legal.alchemy.com/
+  - alert [ref=e236]
