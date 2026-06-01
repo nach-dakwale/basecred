@@ -35,7 +35,7 @@ const TIERS = [
   { minScore: 601, maxLoanEth: 0.75, collateralPct: 0   },
   { minScore: 501, maxLoanEth: 0.40, collateralPct: 20  },
   { minScore: 351, maxLoanEth: 0.15, collateralPct: 50  },
-  { minScore: 201, maxLoanEth: 0.05, collateralPct: 100 },
+  { minScore: 201, maxLoanEth: 0.05, collateralPct: 75  },
 ] as const;
 
 function ageBonusPts(years: number): number {
