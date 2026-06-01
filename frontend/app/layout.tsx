@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     description: "ETH loan terms on Base, based on public GitHub history.",
     images: ["/og.png"],
   },
+  other: {
+    "talentapp:project_verification": "164960bb1427f6cea3620f90cef5001aba886acb7262a548106b451e80cf2dddaccb2e9b1f2d062503b0984f31fba80967d2c682a2892a09600c89378e203c47",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
