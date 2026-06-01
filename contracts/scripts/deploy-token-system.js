@@ -52,8 +52,7 @@ async function main() {
   await (await dividends.setLoanPool(poolAddr)).wait();
   console.log("CredDividends wired to pool");
 
-  // 6. Wire pool -> dividends (owner action)
-  // Pool owner must call setDividends -- deployer != owner in prod, so log the calldata
+  // 6. Wire pool -> dividends (owner = deployer on testnet)
   if (deployer.address.toLowerCase() === owner.toLowerCase()) {
     const poolAsOwner = await ethers.getContractAt("GitHubLoanPool", poolAddr, deployer);
     await (await poolAsOwner.setDividends(dividendsAddr)).wait();
@@ -72,29 +71,46 @@ async function main() {
   const saleAddr = await sale.getAddress();
   console.log(`CredPrivateSale: ${saleAddr}`);
 
-  // 8. Transfer token ownership to protocol owner
+  // 8. Deploy TimelockController (deployer is admin, will renounce after wiring governor)
+  const TWO_DAYS = 2 * 24 * 60 * 60;
+  const TimelockFactory = await ethers.getContractFactory("TimelockController");
+  const timelock = await TimelockFactory.deploy(TWO_DAYS, [], [], deployer.address);
+  await timelock.waitForDeployment();
+  const timelockAddr = await timelock.getAddress();
+  console.log(`TimelockController: ${timelockAddr}`);
+
+  // 9. Deploy Governor
+  const Governor = await ethers.getContractFactory("CredGovernor");
+  const governor = await Governor.deploy(tokenAddr, timelockAddr);
+  await governor.waitForDeployment();
+  const governorAddr = await governor.getAddress();
+  console.log(`CredGovernor:    ${governorAddr}`);
+
+  // 10. Wire timelock roles: governor is proposer + executor, deployer renounces admin
+  const PROPOSER_ROLE = await timelock.PROPOSER_ROLE();
+  const EXECUTOR_ROLE = await timelock.EXECUTOR_ROLE();
+  const ADMIN_ROLE = await timelock.DEFAULT_ADMIN_ROLE();
+  await (await timelock.grantRole(PROPOSER_ROLE, governorAddr)).wait();
+  await (await timelock.grantRole(EXECUTOR_ROLE, governorAddr)).wait();
+  await (await timelock.renounceRole(ADMIN_ROLE, deployer.address)).wait();
+  console.log("Timelock roles wired");
+
+  // 11. Transfer token ownership to protocol owner
   await (await token.transferOwnership(owner)).wait();
   console.log(`Token ownership transferred to ${owner}`);
 
-  // 9. Log timelock + governor deploy instructions (manual -- needs owner)
-  console.log("\n--- Governance (manual steps for owner) ---");
-  console.log("1. Deploy TimelockController(minDelay=2days, proposers=[], executors=[])");
-  console.log("2. Deploy CredGovernor(tokenAddr, timelockAddr)");
-  console.log("3. timelock.grantRole(PROPOSER_ROLE, governorAddr)");
-  console.log("4. timelock.grantRole(EXECUTOR_ROLE, governorAddr)");
-  console.log("5. timelock.renounceRole(TIMELOCK_ADMIN_ROLE, deployerAddr)");
-  console.log("6. pool.transferOwnership(timelockAddr)  -- via two-step acceptOwnership");
+  // 12. Seed pool with ETH if deployer has spare funds
+  const deployerBal = await ethers.provider.getBalance(deployer.address);
+  const seedAmount = ethers.parseEther("0.001");
+  if (deployerBal > seedAmount + ethers.parseEther("0.001")) {
+    await (await deployer.sendTransaction({ to: poolAddr, value: seedAmount })).wait();
+    console.log(`Pool seeded with 0.001 ETH`);
+  }
 
-  console.log("\n--- Token distribution (manual steps for owner) ---");
-  const supply = ethers.parseEther("100000000");
-  console.log(`Total supply: 100,000,000 baseCREDIT`);
-  console.log(`Send to CredPrivateSale (40M): token.transfer(${saleAddr}, ${(supply * 40n / 100n).toString()})`);
-  console.log(`Team allocation (40M):         token.transfer(<vestingOrTeam>, ${(supply * 40n / 100n).toString()})`);
-  console.log(`Treasury (10M):                token.transfer(${treasury}, ${(supply * 10n / 100n).toString()})`);
-  console.log(`Ecosystem grants (10M):        token.transfer(<grants>, ${(supply * 10n / 100n).toString()})`);
-
+  const summary = { tokenAddr, dividendsAddr, poolAddr, saleAddr, timelockAddr, governorAddr };
   console.log("\n--- Deployment summary ---");
-  console.log(JSON.stringify({ tokenAddr, dividendsAddr, poolAddr, saleAddr }, null, 2));
+  console.log(JSON.stringify(summary, null, 2));
+  return summary;
 }
 
 main().catch((e) => { console.error(e.message); process.exit(1); });
