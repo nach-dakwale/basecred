@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
 
 const BASE_URL = "https://basecred-testnet.nachdakwale.workers.dev";
 
@@ -29,7 +32,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className={`h-full antialiased ${inter.className}`}>
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>
       </body>

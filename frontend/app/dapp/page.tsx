@@ -88,12 +88,12 @@ export default function DappPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
-      <header className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-[#0B0D1A] text-slate-100">
+      <header className="border-b border-slate-800/60 px-6 py-4 flex items-center justify-between backdrop-blur-sm sticky top-0 z-10 bg-[#0B0D1A]/80">
         <Link href="/" className="font-semibold text-sm tracking-tight text-white">BaseCred</Link>
         <div className="flex items-center gap-3">
           {githubConnected && (
-            <button onClick={() => signOut()} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
+            <button onClick={() => signOut()} className="text-xs text-slate-500 hover:text-slate-300 transition-colors">
               {session?.user?.name}
             </button>
           )}
@@ -102,19 +102,19 @@ export default function DappPage() {
       </header>
 
       <main className="mx-auto max-w-2xl px-4 py-10 space-y-4">
-        <div className={`rounded-md border px-3 py-2 text-xs ${PUBLIC_NETWORK.isTestnet ? "border-amber-700 bg-amber-950/40 text-amber-300" : "border-blue-800 bg-blue-950/40 text-blue-300"}`}>
-          Active network: {PUBLIC_NETWORK.name}{PUBLIC_NETWORK.isTestnet ? " - test funds only" : ""}
+        <div className={`rounded-lg border px-3 py-2 text-xs ${PUBLIC_NETWORK.isTestnet ? "border-amber-800/60 bg-amber-950/30 text-amber-400" : "border-violet-800/60 bg-violet-950/30 text-violet-400"}`}>
+          Active network: {PUBLIC_NETWORK.name}{PUBLIC_NETWORK.isTestnet ? " — test funds only" : ""}
         </div>
         <div>
           <h1 className="text-xl font-semibold text-white">Developer Credit</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">Borrow ETH on Base against your GitHub contribution history.</p>
+          <p className="text-sm text-slate-500 mt-0.5">Borrow ETH on Base against your GitHub contribution history.</p>
         </div>
 
-        <div className={`rounded-lg border p-4 bg-zinc-900 ${githubConnected ? "border-blue-800" : "border-zinc-800"}`}>
+        <div className={`rounded-xl border p-4 bg-slate-900/40 ${githubConnected ? "border-violet-800/50" : "border-slate-800/60"}`}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-white">1. Connect GitHub</p>
-              <p className="text-xs text-zinc-500 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 We read your public contribution history to calculate your credit score.
               </p>
             </div>
@@ -122,14 +122,14 @@ export default function DappPage() {
               <button
                 onClick={fetchScore}
                 disabled={scoreLoading}
-                className="text-blue-400 text-xs font-medium disabled:opacity-50"
+                className="text-violet-400 text-xs font-medium disabled:opacity-50 hover:text-violet-300 transition-colors"
               >
                 {scoreLoading ? "Calculating..." : breakdown ? "Recalculate Score" : "Calculate Score"}
               </button>
             ) : (
               <button
                 onClick={() => signIn("github")}
-                className="rounded-md bg-zinc-800 border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 transition-colors"
+                className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-700 transition-colors"
               >
                 Connect GitHub
               </button>
@@ -137,11 +137,11 @@ export default function DappPage() {
           </div>
         </div>
 
-        <div className={`rounded-lg border p-4 bg-zinc-900 ${walletConnected ? "border-blue-800" : "border-zinc-800"}`}>
+        <div className={`rounded-xl border p-4 bg-slate-900/40 ${walletConnected ? "border-violet-800/50" : "border-slate-800/60"}`}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-white">2. Connect Wallet</p>
-              <p className="text-xs text-zinc-500 mt-0.5">MetaMask or Coinbase Wallet on {PUBLIC_NETWORK.name}.</p>
+              <p className="text-xs text-slate-500 mt-0.5">MetaMask or Coinbase Wallet on {PUBLIC_NETWORK.name}.</p>
             </div>
             <WalletConnect onAddress={setEthAddress} />
           </div>
@@ -155,7 +155,7 @@ export default function DappPage() {
           <button
             onClick={submitScoreOnChain}
             disabled={oracleLoading}
-            className="w-full rounded-md bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
+            className="w-full rounded-xl bg-violet-600 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50 transition-colors shadow-lg shadow-violet-600/20"
           >
             {oracleLoading ? "Awaiting wallet proof..." : "Sign Wallet Proof and Verify Score"}
           </button>
@@ -167,7 +167,7 @@ export default function DappPage() {
             <button
               onClick={submitScoreOnChain}
               disabled={oracleLoading}
-              className="w-full rounded-md border border-zinc-700 py-2 text-xs text-zinc-500 hover:text-zinc-300 disabled:opacity-50 transition-colors"
+              className="w-full rounded-xl border border-slate-700/60 py-2 text-xs text-slate-500 hover:text-slate-300 disabled:opacity-50 transition-colors"
             >
               {oracleLoading ? "Awaiting wallet proof..." : "Refresh Verified On-Chain Score"}
             </button>
@@ -180,14 +180,14 @@ export default function DappPage() {
         )}
 
         {recentTx && (
-          <div className="rounded-lg border border-blue-800 bg-blue-950/40 p-4 text-sm">
-            <p className="font-medium text-blue-300">Transaction submitted</p>
-            <p className="text-blue-400 font-mono text-xs mt-1 break-all">{recentTx}</p>
+          <div className="rounded-xl border border-violet-800/50 bg-violet-950/30 p-4 text-sm">
+            <p className="font-medium text-violet-300">Transaction submitted</p>
+            <p className="text-violet-400 font-mono text-xs mt-1 break-all">{recentTx}</p>
             <a
               href={`${PUBLIC_NETWORK.explorerUrl}/tx/${recentTx}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 underline text-xs mt-1 inline-block hover:text-blue-400"
+              className="text-violet-500 underline text-xs mt-1 inline-block hover:text-violet-400"
             >
               View on BaseScan
             </a>
