@@ -73,7 +73,7 @@ export default function Home() {
               </thead>
               <tbody className="divide-y divide-zinc-800">
                 {[
-                  { tier: "1", score: "201–350", loan: "0.05 ETH", col: "100%" },
+                  { tier: "1", score: "201–350", loan: "0.05 ETH", col:  "75%" },
                   { tier: "2", score: "351–500", loan: "0.15 ETH", col:  "50%" },
                   { tier: "3", score: "501–600", loan: "0.40 ETH", col:  "20%" },
                   { tier: "4", score: "601–650", loan: "0.75 ETH", col: "None" },
