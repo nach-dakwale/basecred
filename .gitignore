@@ -29,3 +29,7 @@ coverage/
 .idea/
 .vscode/
 .gstack/
+
+# Brain / session artifacts
+.brain-briefing.md
+.playwright-mcp/
