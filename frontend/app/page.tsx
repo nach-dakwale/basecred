@@ -1,19 +1,10 @@
 import Link from "next/link";
+import { SiteNav } from "@/components/SiteNav";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3]">
-      <header className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between">
-        <span className="font-semibold text-sm text-white">BaseCred</span>
-        <nav className="flex items-center gap-5">
-          <Link href="/dividends" className="text-sm text-[#8B949E] hover:text-white transition-colors">Dividends</Link>
-          <Link href="/govern" className="text-sm text-[#8B949E] hover:text-white transition-colors">Govern</Link>
-          <Link href="/sale" className="text-sm text-[#8B949E] hover:text-white transition-colors">Token Sale</Link>
-          <Link href="/dapp" className="rounded-md bg-[#238636] border border-[#2EA043] px-3.5 py-1.5 text-sm font-medium text-white hover:bg-[#2EA043] transition-colors">
-            Launch App
-          </Link>
-        </nav>
-      </header>
+      <SiteNav activePath="/" />
 
       <main className="mx-auto max-w-3xl px-6 py-24 space-y-16">
         <section className="space-y-5">

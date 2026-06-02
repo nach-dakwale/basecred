@@ -4,10 +4,10 @@ export const dynamic = "force-dynamic";
 
 import { useState, useCallback } from "react";
 import lazyLoad from "next/dynamic";
-import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useSignMessage } from "wagmi";
 import { PUBLIC_NETWORK } from "@/lib/network";
+import { SiteNav } from "@/components/SiteNav";
 import type { ScoreBreakdown } from "@/lib/scoring";
 
 const WalletConnect = lazyLoad(
@@ -89,17 +89,19 @@ export default function DappPage() {
 
   return (
     <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3]">
-      <header className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="font-semibold text-sm tracking-tight text-white">BaseCred</Link>
-        <div className="flex items-center gap-3">
-          {githubConnected && (
-            <button onClick={() => signOut()} className="text-xs text-[#6E7681] hover:text-[#E6EDF3] transition-colors">
-              {session?.user?.name}
-            </button>
-          )}
-          <WalletConnect onAddress={setEthAddress} />
-        </div>
-      </header>
+      <SiteNav
+        activePath="/dapp"
+        right={
+          <div className="flex items-center gap-3">
+            {githubConnected && (
+              <button onClick={() => signOut()} className="text-xs text-[#6E7681] hover:text-[#E6EDF3] transition-colors">
+                {session?.user?.name}
+              </button>
+            )}
+            <WalletConnect onAddress={setEthAddress} />
+          </div>
+        }
+      />
 
       <main className="mx-auto max-w-2xl px-4 py-10 space-y-4">
         <div className={`rounded-lg border px-3 py-2 text-xs ${PUBLIC_NETWORK.isTestnet ? "border-[#F0883E]/40 bg-[#161B22] text-[#F0883E]" : "border-[#2EA043]/40 bg-[#0D1117] text-[#3FB950]"}`}>

@@ -4,8 +4,8 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseEther, formatEther } from "viem";
-import Link from "next/link";
 import { WalletConnect } from "@/components/WalletConnect";
+import { SiteNav } from "@/components/SiteNav";
 import { CRED_SALE_ABI, CRED_SALE_ADDRESS } from "@/lib/contracts/cred-sale";
 
 export default function SalePage() {
@@ -42,16 +42,7 @@ export default function SalePage() {
 
   return (
     <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3]">
-      <header className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between">
-        <span className="font-semibold text-sm tracking-tight text-white">BaseCred</span>
-        <nav className="flex items-center gap-4 text-sm">
-          <Link href="/" className="text-[#8B949E] hover:text-white">Home</Link>
-          <Link href="/dapp" className="text-[#8B949E] hover:text-white">App</Link>
-          <Link href="/dividends" className="text-[#8B949E] hover:text-white">Dividends</Link>
-          <Link href="/govern" className="text-[#8B949E] hover:text-white">Govern</Link>
-          <Link href="/sale" className="text-white">Token Sale</Link>
-        </nav>
-      </header>
+      <SiteNav activePath="/sale" />
 
       <main className="mx-auto max-w-lg px-6 py-16 space-y-8">
         <div>

@@ -3,8 +3,8 @@ export const dynamic = "force-dynamic";
 
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { formatEther } from "viem";
-import Link from "next/link";
 import { WalletConnect } from "@/components/WalletConnect";
+import { SiteNav } from "@/components/SiteNav";
 import { BASE_CREDIT_TOKEN_ABI, BASE_CREDIT_TOKEN_ADDRESS } from "@/lib/contracts/base-credit-token";
 import { CRED_DIVIDENDS_ABI, CRED_DIVIDENDS_ADDRESS } from "@/lib/contracts/cred-dividends";
 
@@ -46,16 +46,7 @@ export default function DividendsPage() {
 
   return (
     <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3]">
-      <header className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between">
-        <span className="font-semibold text-sm tracking-tight text-white">BaseCred</span>
-        <nav className="flex items-center gap-4 text-sm">
-          <Link href="/" className="text-[#8B949E] hover:text-white">Home</Link>
-          <Link href="/dapp" className="text-[#8B949E] hover:text-white">App</Link>
-          <Link href="/dividends" className="text-white">Dividends</Link>
-          <Link href="/govern" className="text-[#8B949E] hover:text-white">Govern</Link>
-          <Link href="/sale" className="text-[#8B949E] hover:text-white">Token Sale</Link>
-        </nav>
-      </header>
+      <SiteNav activePath="/dividends" />
 
       <main className="mx-auto max-w-2xl px-6 py-16 space-y-8">
         <div>
