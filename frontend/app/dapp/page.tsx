@@ -92,14 +92,11 @@ export default function DappPage() {
       <SiteNav
         activePath="/dapp"
         right={
-          <div className="flex items-center gap-3">
-            {githubConnected && (
-              <button onClick={() => signOut()} className="text-xs text-[#6E7681] hover:text-[#E6EDF3] transition-colors">
-                {session?.user?.name}
-              </button>
-            )}
-            <WalletConnect onAddress={setEthAddress} />
-          </div>
+          githubConnected ? (
+            <button onClick={() => signOut()} className="text-xs text-[#6E7681] hover:text-[#E6EDF3] transition-colors">
+              {session?.user?.name}
+            </button>
+          ) : undefined
         }
       />
 
@@ -142,10 +139,13 @@ export default function DappPage() {
         <div className={`rounded-md border p-4 bg-[#161B22] ${walletConnected ? "border-[#2EA043]/40" : "border-[#30363D]"}`}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-white">2. Connect Wallet</p>
+              <p className={`text-sm font-medium ${githubConnected ? "text-white" : "text-[#6E7681]"}`}>2. Connect Wallet</p>
               <p className="text-xs text-[#6E7681] mt-0.5">MetaMask or Coinbase Wallet on {PUBLIC_NETWORK.name}.</p>
             </div>
-            <WalletConnect onAddress={setEthAddress} />
+            {githubConnected
+              ? <WalletConnect onAddress={setEthAddress} />
+              : <span className="text-xs text-[#6E7681]">Connect GitHub first</span>
+            }
           </div>
         </div>
 
