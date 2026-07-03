@@ -1,7 +1,7 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseEther, formatEther } from "viem";
 import { WalletConnect } from "@/components/WalletConnect";
@@ -31,7 +31,11 @@ export default function SalePage() {
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: confirming, isSuccess } = useWaitForTransactionReceipt({ hash });
 
-  const now = BigInt(Math.floor(Date.now() / 1000));
+  const [now, setNow] = useState(() => BigInt(Math.floor(Date.now() / 1000)));
+  useEffect(() => {
+    const id = setInterval(() => setNow(BigInt(Math.floor(Date.now() / 1000))), 30_000);
+    return () => clearInterval(id);
+  }, []);
   const saleActive = startTime !== undefined && endTime !== undefined && now >= startTime && now <= endTime;
   const progressPct = hardCap && totalRaised ? Number((totalRaised * 100n) / hardCap) : 0;
 

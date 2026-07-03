@@ -1,6 +1,7 @@
 "use client";
 export const dynamic = "force-dynamic";
 
+import { useEffect } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { formatEther } from "viem";
 import { WalletConnect } from "@/components/WalletConnect";
@@ -36,6 +37,10 @@ export default function DividendsPage() {
 
   const { writeContract, data: claimHash, isPending: claimPending } = useWriteContract();
   const { isLoading: claimConfirming, isSuccess: claimSuccess } = useWaitForTransactionReceipt({ hash: claimHash });
+
+  useEffect(() => {
+    if (claimSuccess) refetchPending();
+  }, [claimSuccess, refetchPending]);
 
   function handleClaim() {
     if (!CRED_DIVIDENDS_ADDRESS) return;

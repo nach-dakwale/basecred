@@ -3,22 +3,10 @@ export const dynamic = "force-dynamic";
 
 import { useAccount, useReadContract } from "wagmi";
 import Link from "next/link";
-import { CRED_GOVERNOR_ABI, CRED_GOVERNOR_ADDRESS, ProposalState } from "@/lib/contracts/cred-governor";
+import { CRED_GOVERNOR_ABI, CRED_GOVERNOR_ADDRESS } from "@/lib/contracts/cred-governor";
 import { SiteNav } from "@/components/SiteNav";
 import { BASE_CREDIT_TOKEN_ABI, BASE_CREDIT_TOKEN_ADDRESS } from "@/lib/contracts/base-credit-token";
 import { formatEther } from "viem";
-
-const PROPOSAL_STATES = ["Pending", "Active", "Canceled", "Defeated", "Succeeded", "Queued", "Expired", "Executed"] as const;
-const STATE_COLORS: Record<string, string> = {
-  Active: "text-green-400 bg-green-950 border-green-800",
-  Succeeded: "text-[#3FB950] bg-violet-950 border-[#2EA043]",
-  Queued: "text-yellow-400 bg-yellow-950 border-yellow-800",
-  Executed: "text-[#8B949E] bg-[#161B22] border-[#30363D]",
-  Defeated: "text-red-400 bg-red-950 border-red-800",
-  Pending: "text-[#8B949E] bg-[#161B22] border-[#30363D]",
-  Canceled: "text-[#6E7681] bg-[#161B22] border-[#30363D]",
-  Expired: "text-[#6E7681] bg-[#161B22] border-[#30363D]",
-};
 
 export default function GovernPage() {
   const { address } = useAccount();
