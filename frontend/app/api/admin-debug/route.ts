@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { getAdminClient, CONTRACT, ADMIN_ABI, CONTRACT_DEPLOY_BLOCK, fetchLoanEvents } from "@/lib/admin-chain";
 
 export async function GET() {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const steps: Record<string, unknown> = {};
   try {
     steps.rpcUrl = process.env.RPC_URL ? "set" : "missing";

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { injected } from "wagmi/connectors";
+import { shortAddr } from "@/lib/format";
 
 interface Props {
   onAddress: (addr: string | null) => void;
@@ -23,7 +24,7 @@ export function WalletConnect({ onAddress }: Props) {
         onClick={() => disconnect()}
         className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-mono text-zinc-300 hover:bg-zinc-700 transition-colors"
       >
-        {address.slice(0, 6)}...{address.slice(-4)}
+        {shortAddr(address)}
       </button>
     );
   }

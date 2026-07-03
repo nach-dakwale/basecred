@@ -6,6 +6,7 @@ import {
   CONTRACT_DEPLOY_BLOCK, fetchLoanEvents,
 } from "@/lib/admin-chain";
 import { PUBLIC_NETWORK } from "@/lib/network";
+import { shortAddr } from "@/lib/format";
 
 type LoanStatus = "active" | "repaid" | "liquidated" | "defaulted";
 
@@ -30,10 +31,6 @@ function statusBadge(status: LoanStatus) {
       {status}
     </span>
   );
-}
-
-function shortAddr(addr: string) {
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 }
 
 async function fetchLoans(): Promise<LoanRow[]> {
